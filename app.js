@@ -80,7 +80,19 @@ document.querySelectorAll("[data-target]").forEach(button => {
   button.addEventListener("click", () => {
     const target = button.dataset.target;
     if (target === "courses") {
-      showPanel("学習講座", "<ul>" + courseList.map(c => `<li><strong>${c[0]}：${c[1]}</strong><br>${c[2]}</li>`).join("") + "</ul><p class='note'>この版では講座一覧を表示しています。各回の本文は、確認した資料に基づいて順番に追加していきます。</p>");
+      showPanel(
+     "学習講座",
+     "<p>講座のタイトルを押すと内容が開きます。もう一度押すと閉じます。</p>" +
+     courseList.map(c => `
+       <details class="result-item">
+         <summary style="cursor: pointer; padding: 8px 0;">
+           <strong>${c[0]}：${c[1]}</strong>
+         </summary>
+         <p>${c[2]}</p>
+         ${c[3] || "<p class='note'>講座本文は、これから追加します。</p>"}
+       </details>
+     `).join("")
+   );
     } else if (target === "drugs") {
       showPanel("薬剤リファレンス", "<ul>" + drugData.slice(0,4).map(d => `<li><strong>${d.term}</strong><br>${d.body}</li>`).join("") + "</ul>");
     } else if (target === "conditions") {
