@@ -1,5 +1,53 @@
 const courseList = [
-  ["第1回", "心臓移植と免疫の基礎", "免疫のしくみ、拒絶反応の全体像を学ぶ。"],
+  [
+    "第1回",
+    "心臓移植と免疫の基礎",
+    "免疫のしくみ、拒絶反応の全体像を学ぶ。",
+    `
+      <h3>この回の学習目標</h3>
+      <ul>
+        <li>自然免疫と獲得免疫の役割を説明できる。</li>
+        <li>心臓移植後に拒絶反応が起こる理由を説明できる。</li>
+        <li>免疫抑制薬の継続と定期検査の必要性を説明できる。</li>
+      </ul>
+
+      <h3>1. 免疫は体を守るしくみ</h3>
+      <p>免疫は、細菌・ウイルス・真菌などから体を守るしくみです。複数の細胞やたんぱく質が協力して働きます。移植では、この防御のしくみが、他の人から提供された心臓にも反応することが問題になります。</p>
+
+      <h3>2. 自然免疫と獲得免疫</h3>
+      <p><strong>自然免疫：</strong>皮膚・粘膜のバリアや、微生物を取り込む食細胞などが、早い段階から防御します。</p>
+      <p><strong>獲得免疫：</strong>T細胞やB細胞などが、特定の抗原に対応します。免疫記憶により、同じ抗原に再び出会ったときに、より速く強く反応できます。自然免疫と獲得免疫は互いに協力します。</p>
+
+      <h3>3. T細胞・B細胞・抗体</h3>
+      <ul>
+        <li><strong>T細胞：</strong>免疫反応の調整や、標的となる細胞への攻撃などに関わります。</li>
+        <li><strong>B細胞：</strong>活性化して形質細胞になると、抗体を産生します。</li>
+        <li><strong>抗体：</strong>特定の抗原に結合するたんぱく質です。感染防御に役立つ一方、移植臓器への免疫反応に関わる場合があります。</li>
+      </ul>
+
+      <h3>4. なぜ拒絶反応が起こるのか</h3>
+      <p>移植された心臓は別の人に由来するため、受け手の免疫系が異なるものとして認識し、攻撃することがあります。これが拒絶反応です。細胞性拒絶反応と抗体関連型拒絶反応などがあり、詳しい評価方法は第5回で学びます。</p>
+
+      <h3>5. 免疫抑制薬と定期検査の役割</h3>
+      <p>免疫抑制薬は、移植された心臓に対する免疫反応を抑えます。一方で、感染症や薬剤の副作用にも注意が必要です。移植チームが検査結果と体調を確認し、治療を調整します。</p>
+      <p>薬を正しく服用していても、拒絶反応が起こることがあります。体調がよくても、指示された受診・検査と服薬を継続します。副作用や飲み忘れがあった場合も、自己判断で変更せず相談することが大切です。</p>
+
+      <h3>振り返り</h3>
+      <p>「体調がよければ、免疫抑制薬や定期検査は必要ない」と考えている患者さんに、どのように説明しますか？ 自分の言葉で考えてから、下の説明例を開いてください。</p>
+      <details>
+        <summary style="cursor: pointer; padding: 8px 0;">説明例を読む</summary>
+        <p>「体調がよいときも、移植した心臓を守る薬は必要です。薬を飲んでいても拒絶反応が起こることがあるため、検査で確認を続けます。薬で困ることがあれば、自分でやめずに移植チームへ相談してください。」</p>
+      </details>
+
+      <h3>出典</h3>
+      <ul>
+        <li><a href="https://nigms.nih.gov/biobeat/2023/12/what-is-the-immune-system" target="_blank" rel="noopener noreferrer">NIH／NIGMS：What Is the Immune System?（2023）</a></li>
+        <li><a href="https://www.nhsbt.nhs.uk/organ-transplantation/heart/benefits-and-risks-of-a-heart-transplant/risks-of-a-heart-transplant/rejection-of-a-transplanted-heart/" target="_blank" rel="noopener noreferrer">NHS Blood and Transplant：Rejection of a transplanted heart</a></li>
+        <li><a href="https://www.nhsbt.nhs.uk/organ-transplantation/heart/living-with-a-heart-transplant/heart-transplant-medicines/" target="_blank" rel="noopener noreferrer">NHS Blood and Transplant：Heart transplant medicines</a></li>
+      </ul>
+      <p class="note">個人学習用の要約です。海外資料の制度や治療手順を、そのまま国内の診療に適用するものではありません。患者ごとの診断・処方・検査計画は、所属施設の手順と移植チームの指示に従ってください。資料確認日：2026年10月20日。</p>
+    `
+  ],
   ["第2回", "主要な免疫抑制剤", "CNI、ミコフェノール酸系製剤、ステロイドの役割と副作用。"],
   ["第3回", "TDMと薬剤相互作用", "採血・服薬時刻、血中濃度、相互作用の確認。"],
   ["第4回", "感染症の予防と対応", "CMV、PJPなどの感染リスクと観察。"],
