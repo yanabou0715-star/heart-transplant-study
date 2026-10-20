@@ -172,7 +172,78 @@ const courseList = [
       <p class="note">個人学習用の要約です。投与量や血中濃度目標を一律に示すものではありません。実際に使用する製剤の最新資料、所属施設の手順、移植チームの指示に従ってください。資料確認日：2026年10月20日。</p>
     `
   ],
-  ["第4回", "感染症の予防と対応", "CMV、PJPなどの感染リスクと観察。"],
+  [
+    "第4回",
+    "感染症の予防と対応",
+    "CMV、PJPなどの感染リスクと観察。",
+    `
+      <h3>この回の学習目標</h3>
+      <ul>
+        <li>心臓移植後に感染症への注意が必要な理由を説明できる。</li>
+        <li>CMVとPJPの基本、予防と監視の役割を区別できる。</li>
+        <li>体調変化から確認事項と相談の緊急性を整理できる。</li>
+      </ul>
+
+      <h3>1. 感染リスクは移植直後だけではない</h3>
+      <p>免疫抑制薬は拒絶反応を予防する一方で、感染に対する防御力を低下させます。手術創やカテーテルなども感染の入口になります。感染症は移植直後だけでなく、退院後や移植から年数が経過してからも起こります。</p>
+      <p>移植後の時期だけでなく、免疫抑制の強さ、最近の拒絶反応治療、予防薬の使用状況、生活環境などを合わせて考えます。感染症と拒絶反応の症状は似ることがあり、症状だけで区別しません。</p>
+
+      <h3>2. 体温だけでなく「いつもとの違い」を見る</h3>
+      <p>免疫抑制下では、感染症が典型的な症状を示さないことがあります。高熱がないことだけで感染症を否定せず、次の変化を確認します。</p>
+      <ul>
+        <li><strong>全身：</strong>発熱・悪寒、強い倦怠感、食欲低下、普段と違う反応や活動性。</li>
+        <li><strong>呼吸：</strong>咳、痰、息切れ、呼吸数の増加、SpO₂の低下。</li>
+        <li><strong>消化器：</strong>下痢、嘔吐、腹痛、血便、飲水や服薬ができない状態。</li>
+        <li><strong>尿路：</strong>排尿時痛、頻尿、尿の変化、尿量減少。</li>
+        <li><strong>皮膚・創部：</strong>発赤、腫れ、痛み、排液、発疹。</li>
+      </ul>
+
+      <h3>3. CMV：感染と発症を区別する</h3>
+      <p>CMVはサイトメガロウイルスです。ドナー由来の感染や、体内に潜伏していたウイルスの再活性化などが問題になります。</p>
+      <p><strong>CMV感染：</strong>症状の有無にかかわらず、検体からウイルスの増殖を示す証拠が検出された状態です。</p>
+      <p><strong>CMV感染症（CMV disease）：</strong>感染の証拠に加え、CMVに起因する症状・所見がある状態です。検査陽性だけで、症状を伴うCMV感染症と同じ意味にはなりません。</p>
+      <p>予防・監視の計画は、ドナーとレシピエントのCMV抗体の状況、移植臓器、免疫抑制などに応じて決めます。予防投与は発症を防ぐために薬を使う方法、先制治療は定期検査でウイルス増殖を捉え、発症前に治療する方法です。どの方法を選ぶかは移植チームの方針を確認します。</p>
+      <p>看護では、検査予定と結果の推移、予防薬の服薬状況、体調変化を確認します。治療開始や終了を単一の検査値だけで判断しません。</p>
+
+      <h3>4. PJP：予防薬と呼吸状態の確認</h3>
+      <p>PJPは、真菌であるPneumocystis jiroveciiによるニューモシスチス肺炎です。PCPとも呼ばれ、臓器移植などで免疫機能が低下した人に重い肺炎を起こすことがあります。咳、発熱、呼吸困難などがみられます。</p>
+      <p>予防にはST合剤（スルファメトキサゾール・トリメトプリム）が用いられます。使用できない場合は代替薬を検討しますが、薬剤・量・期間は患者ごとの処方を確認します。予防中でも、新たな呼吸症状を放置しません。</p>
+      <p>ST合剤では発疹、血球減少、腎障害、高カリウム血症などにも注意し、症状、血算、腎機能、電解質を確認します。予防薬と治療薬では使い方が異なるため、処方目的も把握します。</p>
+
+      <h3>5. 日常生活での感染予防</h3>
+      <ul>
+        <li>手洗いを行い、口腔内と皮膚を清潔に保ちます。</li>
+        <li>感染症状のある人との接触を避け、混雑時の対策は流行状況と移植チームの指示に合わせます。</li>
+        <li>食品は清潔に扱い、十分に加熱し、生の食材と調理済み食品を分けて保管・調理します。具体的な食品制限は施設の指導を確認します。</li>
+        <li>処方された予防薬と定期検査を継続し、予防薬の終了後も体調変化に注意します。</li>
+        <li>ワクチンは種類と接種時期を移植チームへ相談します。</li>
+      </ul>
+
+      <h3>6. 症状が出たときの確認と相談</h3>
+      <p>発熱、続く下痢・嘔吐、新たな咳や息切れ、創部の変化などは、施設から示された基準に従って速やかに相談します。薬や水分を保てない場合も連絡が必要です。夜間・休日の連絡先を、体調のよいときに確認しておきます。</p>
+      <p>強い呼吸困難、意識の変化、急速な状態悪化などは、体温の高さにかかわらず緊急対応が必要です。自宅では救急要請を含む対応を、院内では施設の緊急手順を優先します。</p>
+      <p>報告では、症状の開始時期と経過、バイタルサイン、SpO₂と普段との差、水分摂取・尿量、服薬状況、最近の拒絶反応治療、感染者との接触などを整理します。情報が全部そろうまで連絡を遅らせません。</p>
+      <p>免疫抑制薬を自己判断で中止せず、余った抗菌薬や市販薬を自己判断で追加しません。薬を使う前に、相互作用も含めて確認します。</p>
+
+      <h3>振り返り</h3>
+      <p>患者さんから「熱は高くないが、昨日から咳と息切れがあり、普段よりSpO₂が低い」と連絡がありました。「熱がないから様子を見てよい」と説明してよいでしょうか？</p>
+      <details>
+        <summary style="cursor: pointer; padding: 8px 0;">確認・対応の例を読む</summary>
+        <p>発熱の有無だけで判断しません。呼吸の苦しさ、会話や歩行の可否、意識状態、SpO₂の値と推移、普段との差を確認し、速やかに移植チームへ連絡します。強い呼吸困難や意識の変化があれば救急対応を優先します。感染症だけでなく拒絶反応や他の原因も考え、症状だけでPJPと断定しません。</p>
+      </details>
+
+      <h3>出典</h3>
+      <ul>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12180710/" target="_blank" rel="noopener noreferrer">The Transplantation Society：CMV管理に関する第4回国際コンセンサスガイドライン（2025）</a></li>
+        <li><a href="https://www.cdc.gov/pneumocystis-pneumonia/about/index.html" target="_blank" rel="noopener noreferrer">CDC：Pneumocystis Pneumonia Basics</a></li>
+        <li><a href="https://www.pmda.go.jp/PmdaSearch/rdDetail/iyaku/6290100D1088_2?user=1" target="_blank" rel="noopener noreferrer">PMDA：バクタ製剤 電子添文・患者向医薬品ガイド</a></li>
+        <li><a href="https://www.nhsbt.nhs.uk/organ-transplantation/heart/benefits-and-risks-of-a-heart-transplant/risks-of-a-heart-transplant/infections-and-heart-transplants/" target="_blank" rel="noopener noreferrer">NHS Blood and Transplant：Infections and heart transplants</a></li>
+        <li><a href="https://www.nhsbt.nhs.uk/organ-transplantation/resources/food-safety-advice-after-a-heart-or-lung-transplant/" target="_blank" rel="noopener noreferrer">NHS Blood and Transplant：Food safety after a heart or lung transplant</a></li>
+        <li><a href="https://www.newcastle-hospitals.nhs.uk/resources/infection-after-a-transplant/" target="_blank" rel="noopener noreferrer">Newcastle Hospitals：Infection after a transplant（小児心肺移植向け患者資料）</a></li>
+      </ul>
+      <p class="note">個人学習用の要約です。すべての感染症・予防策を網羅していません。海外資料の治療手順や小児向けの基準をそのまま適用せず、患者ごとの処方、最新の国内資料、所属施設の手順、移植チームの指示に従ってください。資料確認日：2026年10月20日。</p>
+    `
+  ],
   ["第5回", "拒絶反応の基礎", "ACR、AMR、心筋生検、DSA、心エコー。"],
   ["第6回", "長期管理と副作用", "腎機能、代謝、CAV、悪性腫瘍など。"],
   ["第7回", "相互作用と検査値の読み方", "症状、検査値、服薬状況を合わせて考える。"],
