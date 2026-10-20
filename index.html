@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2459a9">
+  <meta name="description" content="心臓移植看護の学習用リファレンス">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+  <title>心臓移植 学習ノート</title>
+</head>
+<body>
+  <header class="top">
+    <div class="brand-icon" aria-hidden="true">♥</div>
+    <div>
+      <p class="eyebrow">PERSONAL STUDY GUIDE</p>
+      <h1>心臓移植 学習ノート</h1>
+      <p class="subtitle">学ぶ・確認する・臨床に活かす</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="welcome">
+      <p class="eyebrow">MY LEARNING SPACE</p>
+      <h2>今日も少しずつ、学びを深めよう。</h2>
+      <p>心臓移植・免疫抑制療法に関する個人学習用アプリです。</p>
+    </section>
+
+    <section class="section">
+      <h2>学習メニュー</h2>
+      <div class="menu-grid">
+        <button class="menu-card blue" data-target="courses">
+          <span class="menu-icon">📚</span><span class="menu-title">学習講座</span>
+          <span class="menu-desc">基礎から移植後管理まで</span>
+        </button>
+        <button class="menu-card green" data-target="drugs">
+          <span class="menu-icon">💊</span><span class="menu-title">薬剤リファレンス</span>
+          <span class="menu-desc">作用・副作用・観察項目</span>
+        </button>
+        <button class="menu-card orange" data-target="conditions">
+          <span class="menu-icon">🫀</span><span class="menu-title">拒絶反応・感染症</span>
+          <span class="menu-desc">主な所見と確認事項</span>
+        </button>
+        <button class="menu-card purple" data-target="quiz">
+          <span class="menu-icon">☑️</span><span class="menu-title">症例問題・復習</span>
+          <span class="menu-desc">問題を解いて理解を確認</span>
+        </button>
+        <button class="menu-card pink" data-target="saved">
+          <span class="menu-icon">🔖</span><span class="menu-title">ブックマーク・メモ</span>
+          <span class="menu-desc">大切な項目を保存</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="section" id="content-panel" aria-live="polite">
+      <h2 id="panel-title">はじめに</h2>
+      <div id="panel-body" class="panel">
+        <p>上のメニューをタップすると、学習内容がここに表示されます。</p>
+        <p class="note">このスターター版は画面と基本操作を試すためのものです。医療情報は、信頼できる資料を確認してから追加してください。</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>用語を検索</h2>
+      <label class="search-label" for="search-input">キーワード（例：タクロリムス、DSA、CMV）</label>
+      <div class="search-row">
+        <input id="search-input" type="search" placeholder="用語を入力" autocomplete="off">
+        <button id="search-button" class="primary-button">検索</button>
+      </div>
+      <div id="search-results" class="results" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>個人学習用・参考情報</p>
+    <p>実際の診療では、最新の添付文書、診療ガイドライン、所属施設の手順および移植チームの指示を優先してください。</p>
+  </footer>
+  <script src="app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js").catch(console.error));
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "心臓移植 学習ノート",
+  "short_name": "移植学習ノート",
+  "lang": "ja",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f8fc",
+  "theme_color": "#2459a9",
+  "description": "心臓移植看護の個人学習用リファレンス"
+}
