@@ -1,4 +1,4 @@
-const CACHE_NAME = "transplant-study-v1";
+const CACHE_NAME = "transplant-study-v2";
 const APP_FILES = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.json"];
 
 self.addEventListener("install", event => {
