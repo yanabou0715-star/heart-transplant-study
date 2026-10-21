@@ -597,18 +597,145 @@ const conditions = {
     <p class="note">これは学習用の要約です。緊急時は施設の手順に従い、移植チームへ速やかに連絡してください。</p>`
 };
 
-const quiz = {
-  title: "症例問題・復習",
-  html: `<h3>問題：タクロリムスの血中濃度上昇とクレアチニン上昇、振戦が見られます。</h3>
-    <p>新しく抗真菌薬が開始されていました。適切な初期対応は？</p>
-    <div class="quiz-options">
-      <button class="quiz-option" data-answer="a">A. 拒絶反応と判断して免疫抑制を強化する</button>
-      <button class="quiz-option" data-answer="b">B. 服薬・採血時刻、併用薬、腎機能などを確認し、移植チームに報告する</button>
-      <button class="quiz-option" data-answer="c">C. 自己判断でタクロリムスを中止する</button>
-    </div>
-    <div id="quiz-feedback" aria-live="polite"></div>
-    <p class="note">正解はBです。相互作用や採血時刻を確認し、患者の状態と検査値を合わせて報告します。自己判断で休薬・増減しません。</p>`
-};
+const quizSources = [
+  [
+    "PMDA：プログラフの添付文書・患者向医薬品ガイド",
+    "https://www.pmda.go.jp/PmdaSearch/rdDetail/iyaku/3999014M1022_3?user=1"
+  ],
+  [
+    "NHSBT：心臓移植後の注意すべき症状",
+    "https://www.nhsbt.nhs.uk/organ-transplantation/heart/living-with-a-heart-transplant/warning-signs-after-a-heart-transplant/"
+  ],
+  [
+    "AHRQ：Teach-Back",
+    "https://www.ahrq.gov/teamstepps-program/curriculum/communication/tools/teachback.html"
+  ]
+];
+
+const quizQuestions = [
+  {
+    "topic": "相互作用と観察",
+    "question": "タクロリムス服用中、新しく抗真菌薬が開始され、血中濃度とクレアチニンの上昇、振戦が見られました。適切な対応は？",
+    "options": [
+      "拒絶反応と決めて免疫抑制を強化する",
+      "服薬・採血時刻、併用薬、症状と検査値を確認し、移植チームに速やかに報告する",
+      "自己判断でタクロリムスを中止する"
+    ],
+    "answer": 1,
+    "explanation": "一部の抗真菌薬はタクロリムスの血中濃度を上昇させます。薬剤名と開始時期、採血条件、腎機能や症状を合わせて報告します。投与量や休薬の判断は移植チームが行います。",
+    "source": 0
+  },
+  {
+    "topic": "TDMの採血条件",
+    "question": "タクロリムスのトラフ値を測定する予定でしたが、採血前に服薬したと分かりました。どう考えますか？",
+    "options": [
+      "通常のトラフ値としてそのまま比較する",
+      "検査値だけで次回の投与量を決める",
+      "実際の服薬・採血時刻を確認して報告し、結果の解釈や再検査の要否を相談する"
+    ],
+    "answer": 2,
+    "explanation": "トラフ値は通常、次回服薬の直前に採血して評価します。採血前に服薬した結果を通常のトラフ値として扱わず、時刻を記録して相談します。採血日の服薬方法は施設の指示に従います。",
+    "source": 0
+  },
+  {
+    "topic": "薬剤の役割",
+    "question": "タクロリムスとボリコナゾールについて正しい説明は？",
+    "options": [
+      "別の薬剤で、タクロリムスは免疫抑制薬、ボリコナゾールは抗真菌薬。併用時は相互作用に注意する",
+      "同じ成分の薬なので置き換えてよい",
+      "一緒に使っても血中濃度には影響しない"
+    ],
+    "answer": 0,
+    "explanation": "両者は別の薬剤です。ボリコナゾールはタクロリムスの血中濃度を上昇させることがあるため、移植チームによる血中濃度の確認と投与量の調節が必要になります。自分で置き換えたり増減したりしません。",
+    "source": 0
+  },
+  {
+    "topic": "服薬支援",
+    "question": "体調がよく、免疫抑制薬を減らしたいと相談されました。適切な支援は？",
+    "options": [
+      "症状がなければ本人の判断で減らしてよいと伝える",
+      "自己判断で変更せず、負担や困りごとを聞き、移植チームへの相談につなげる",
+      "通院を続けるなら服薬はやめてよいと伝える"
+    ],
+    "answer": 1,
+    "explanation": "体調がよくても処方どおりの服薬が大切です。副作用への不安、生活リズム、費用などの困りごとを確認し、治療を続けられる方法をチームと考えます。",
+    "source": 0
+  },
+  {
+    "topic": "症状と相談行動",
+    "question": "心臓移植後、自宅で新たな息切れと下痢が出ています。発熱は目立ちません。適切な対応は？",
+    "options": [
+      "発熱がないので次の定期受診まで待つ",
+      "自己判断で免疫抑制薬を中断する",
+      "症状の経過を確認し、施設の連絡手順に従って速やかに移植チームへ相談する"
+    ],
+    "answer": 2,
+    "explanation": "息切れや下痢も移植チームに相談すべき症状です。発熱の有無だけで安心せず、経過や服薬状況を伝えます。強い呼吸困難、意識の異常などがあれば救急対応を優先し、施設の緊急時手順に従います。",
+    "source": 1
+  },
+  {
+    "topic": "患者教育",
+    "question": "薬の飲み方を説明した後、理解を確かめる方法として適切なのは？",
+    "options": [
+      "患者さん自身の言葉で、飲み方と困ったときの対応を説明してもらう",
+      "「分かりましたか」と聞き、うなずけば確認を終える",
+      "説明用紙を渡したので確認は省く"
+    ],
+    "answer": 0,
+    "explanation": "ティーチバックでは患者さん自身の言葉で説明してもらい、こちらの説明が伝わったかを確かめます。患者さんを試すためではありません。伝わっていなければ説明を変えて、もう一度確認します。",
+    "source": 2
+  }
+];
+let quizAnswers = {};
+
+function updateQuizScore() {
+  const answered = Object.keys(quizAnswers).length;
+  const correct = quizQuestions.reduce((sum, question, index) =>
+    sum + (quizAnswers[index] === question.answer ? 1 : 0), 0);
+  const score = document.getElementById("quiz-score");
+  if (score) score.textContent = `回答 ${answered} / ${quizQuestions.length}問・正解 ${correct}問`;
+}
+
+function showQuiz() {
+  quizAnswers = {};
+  showPanel("症例問題・復習", `
+    <p>全${quizQuestions.length}問です。各問で答えを選ぶと解説が表示されます。</p>
+    <p class="note">学習用の架空の場面です。実際の判断は最新の資料、施設の手順と移植チームの指示に従ってください。点数は学習の目安で、臨床能力の判定ではありません。回答はこの画面を離れるとリセットされます。</p>
+    <p id="quiz-score" role="status"></p>
+    ${quizQuestions.map((question, index) => `
+      <section class="quiz-card" aria-labelledby="quiz-title-${index}">
+        <h3 id="quiz-title-${index}">第${index + 1}問：${question.topic}</h3>
+        <p>${question.question}</p>
+        <div class="quiz-options" role="group" aria-label="第${index + 1}問の選択肢">
+          ${question.options.map((option, choice) => `<button type="button" class="quiz-option" data-question="${index}" data-choice="${choice}" aria-describedby="quiz-feedback-${index}">${["A", "B", "C"][choice]}. ${option}</button>`).join("")}
+        </div>
+        <div id="quiz-feedback-${index}" class="quiz-feedback" aria-live="polite"></div>
+      </section>`).join("")}
+    <button type="button" id="quiz-reset" class="study-button">もう一度解く</button>
+    <details class="quiz-sources"><summary>出典（確認日：2026年10月21日）</summary>
+      <ol>${quizSources.map(source => `<li><a href="${source[1]}" target="_blank" rel="noopener noreferrer">${source[0]}</a></li>`).join("")}</ol>
+    </details>`);
+  updateQuizScore();
+  panelBody.querySelectorAll(".quiz-option").forEach(button => {
+    button.addEventListener("click", () => {
+      const index = Number(button.dataset.question);
+      if (Object.prototype.hasOwnProperty.call(quizAnswers, index)) return;
+      const choice = Number(button.dataset.choice);
+      quizAnswers[index] = choice;
+      const question = quizQuestions[index];
+      panelBody.querySelectorAll(`[data-question="${index}"]`).forEach(option => {
+        option.disabled = true;
+        option.setAttribute("aria-pressed", String(option === button));
+      });
+      const feedback = document.getElementById(`quiz-feedback-${index}`);
+      feedback.className = "quiz-feedback result-item";
+      feedback.textContent = (choice === question.answer ? "正解です。" : "不正解です。") +
+        `正解は${["A", "B", "C"][question.answer]}。${question.explanation}（出典${question.source + 1}）`;
+      updateQuizScore();
+    });
+  });
+  document.getElementById("quiz-reset").addEventListener("click", showQuiz);
+}
 
 const panelTitle = document.getElementById("panel-title");
 const panelBody = document.getElementById("panel-body");
@@ -617,15 +744,7 @@ function showPanel(title, html) {
   panelTitle.textContent = title;
   panelBody.innerHTML = html;
   panelBody.scrollIntoView({ behavior: "smooth", block: "start" });
-  panelBody.querySelectorAll(".quiz-option").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const feedback = document.getElementById("quiz-feedback");
-      feedback.className = "result-item";
-      feedback.textContent = btn.dataset.answer === "b"
-        ? "正解です。相互作用、服薬・採血時刻、腎機能などを確認し、移植チームに報告します。"
-        : "もう一度考えてみましょう。薬剤の自己判断による中止・増減は避け、原因を確認して移植チームに報告します。";
-    });
-  });
+
 }
 
 // 個人学習の記録。患者情報は保存しないでください。
@@ -689,6 +808,14 @@ function saveStudyChange(change) {
 
 const studyStyle = document.createElement("style");
 studyStyle.textContent = `
+  .quiz-card { border-top: 1px solid #dce5f0; padding: 18px 0; }
+  .quiz-options { display: grid; gap: 8px; margin: 12px 0; }
+  .quiz-option { width: 100%; min-height: 44px; white-space: normal; overflow-wrap: anywhere; padding: 12px; border: 1px solid #aebfd5; border-radius: 10px; background: #fff; color: #182b45; text-align: left; font: inherit; cursor: pointer; }
+  .quiz-option:disabled { cursor: default; opacity: 1; color: #45566c; }
+  .quiz-option[aria-pressed="true"] { background: #eaf2ff; border: 2px solid #2459a9; }
+  .quiz-feedback:empty { display: none; }
+  .quiz-feedback { margin-top: 10px; }
+  .quiz-sources { margin-top: 18px; overflow-wrap: anywhere; }
   .study-overview { margin: 0 0 16px; }
   .study-progress { width: 100%; height: 18px; accent-color: #2459a9; }
   .study-tools { border-top: 1px solid #dce5f0; margin-top: 18px; padding-top: 14px; }
@@ -873,7 +1000,7 @@ document.querySelectorAll("[data-target]").forEach(button => {
     } else if (target === "conditions") {
       showPanel(conditions.title, conditions.html);
     } else if (target === "quiz") {
-      showPanel(quiz.title, quiz.html);
+      showQuiz();
     } else if (target === "saved") {
       showSavedStudy();
     }
