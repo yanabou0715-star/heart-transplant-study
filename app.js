@@ -628,23 +628,246 @@ function showPanel(title, html) {
   });
 }
 
+// 個人学習の記録。患者情報は保存しないでください。
+const STUDY_STORAGE_KEY = "heart-transplant-study:learning:v1";
+const courseIds = courseList.map((_, index) => "course-" + (index + 1));
+let studyState = { version: 1, completed: {}, bookmarks: {}, notes: {} };
+let studyStorageError = "";
+let studyStorageBlocked = false;
+
+function parseStudyState(raw) {
+  if (raw === null) return { version: 1, completed: {}, bookmarks: {}, notes: {} };
+  const value = JSON.parse(raw);
+  if (!value || value.version !== 1 || !value.completed || !value.bookmarks || !value.notes ||
+      typeof value.completed !== "object" || typeof value.bookmarks !== "object" ||
+      typeof value.notes !== "object" || Array.isArray(value.completed) ||
+      Array.isArray(value.bookmarks) || Array.isArray(value.notes)) {
+    throw new Error("Invalid learning record");
+  }
+  const state = { version: 1, completed: {}, bookmarks: {}, notes: {} };
+  courseIds.forEach(id => {
+    if (value.completed[id] === true) state.completed[id] = true;
+    if (value.bookmarks[id] === true) state.bookmarks[id] = true;
+    if (typeof value.notes[id] === "string") state.notes[id] = value.notes[id];
+  });
+  return state;
+}
+
+try {
+  studyState = parseStudyState(localStorage.getItem(STUDY_STORAGE_KEY));
+} catch (error) {
+  studyStorageBlocked = true;
+  studyStorageError = "学習記録を読み取れませんでした。既存の記録を保護するため保存を停止しています。ブラウザの保存設定を確認してください。講座は引き続き読めます。";
+}
+
+function escapeStudyText(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[char]));
+}
+
+function saveStudyChange(change) {
+  if (studyStorageBlocked) {
+    updateStudyControls();
+    return false;
+  }
+  try {
+    // 他のタブの保存を取り込んでから、この操作の対象だけを更新する。
+    const next = parseStudyState(localStorage.getItem(STUDY_STORAGE_KEY));
+    change(next);
+    localStorage.setItem(STUDY_STORAGE_KEY, JSON.stringify(next));
+    studyState = next;
+    studyStorageError = "";
+    updateStudyControls();
+    return true;
+  } catch (error) {
+    studyStorageError = "保存できませんでした。保存容量やブラウザの設定を確認して再試行してください。入力中のメモは残っています。画面を閉じる前に必要な文章をコピーしてください。";
+    updateStudyControls();
+    return false;
+  }
+}
+
+const studyStyle = document.createElement("style");
+studyStyle.textContent = `
+  .study-overview { margin: 0 0 16px; }
+  .study-progress { width: 100%; height: 18px; accent-color: #2459a9; }
+  .study-tools { border-top: 1px solid #dce5f0; margin-top: 18px; padding-top: 14px; }
+  .study-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 10px 0; }
+  .study-actions label { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
+  .study-actions input { width: 20px; height: 20px; }
+  .study-button { min-height: 44px; border: 1px solid #aebfd5; border-radius: 10px; padding: 8px 12px; background: #fff; color: #182b45; font: inherit; cursor: pointer; }
+  .study-button[aria-pressed="true"] { background: #eaf2ff; border-color: #2459a9; }
+  .study-note { width: 100%; display: block; min-height: 120px; padding: 10px; margin: 8px 0; border: 1px solid #aebfd5; border-radius: 10px; font: inherit; resize: vertical; }
+  .study-note:focus-visible { outline: 3px solid #8bb7ff; outline-offset: 2px; }
+  .study-message { min-height: 1.6em; font-size: .85rem; }
+  .study-error { color: #8b1c1c; background: #fff1f1; padding: 10px; border-radius: 8px; }
+  .study-saved-note { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .study-course { margin-bottom: 10px; }
+`;
+document.head.appendChild(studyStyle);
+
+function studyOverview() {
+  return `<div class="study-overview">
+    <p id="study-progress-label" role="status"></p>
+    <progress id="study-progress" class="study-progress" max="${courseList.length}" value="0" aria-labelledby="study-progress-label"></progress>
+    <p class="note">学習済みはご自身の記録です。理解度や臨床能力の認定ではありません。記録はこのブラウザ内に保存され、PCとiPhoneでは共有されません。ブラウザのデータ削除などで失われることがあります。</p>
+    <p id="study-storage-message" role="alert" hidden></p>
+  </div>`;
+}
+
+function courseStudyTools(index) {
+  const id = courseIds[index];
+  return `<div class="study-tools" data-study-course="${id}">
+    <h3>この講座の学習記録</h3>
+    <div class="study-actions">
+      <label><input type="checkbox" data-study-complete="${id}">学習済みにする</label>
+      <button type="button" class="study-button" data-study-bookmark="${id}" aria-pressed="false">ブックマークする</button>
+    </div>
+    <label for="study-note-${id}">個人学習メモ（10,000文字まで）</label>
+    <p class="note">患者・職員を特定できる情報は入力しないでください。「メモを保存」を押すと保存されます。</p>
+    <textarea id="study-note-${id}" class="study-note" maxlength="10000" data-study-note="${id}" data-dirty="false" placeholder="学んだこと、次に確認したいこと"></textarea>
+    <div class="study-actions">
+      <button type="button" class="primary-button" data-study-save="${id}">メモを保存</button>
+      <button type="button" class="study-button" data-study-delete="${id}">メモを削除</button>
+    </div>
+    <p id="study-note-status-${id}" class="study-message" role="status"></p>
+  </div>`;
+}
+
+function updateStudyControls() {
+  const count = courseIds.filter(id => studyState.completed[id]).length;
+  const label = document.getElementById("study-progress-label");
+  const progress = document.getElementById("study-progress");
+  if (label) label.textContent = `学習済み ${count} / ${courseList.length} 講座（${Math.round(count / courseList.length * 100)}%）`;
+  if (progress) progress.value = count;
+  const warning = document.getElementById("study-storage-message");
+  if (warning) {
+    warning.hidden = !studyStorageError;
+    warning.className = studyStorageError ? "study-error" : "";
+    warning.textContent = studyStorageError;
+  }
+  panelBody.querySelectorAll("[data-study-complete]").forEach(input => {
+    input.checked = !!studyState.completed[input.dataset.studyComplete];
+  });
+  panelBody.querySelectorAll("[data-study-bookmark]").forEach(button => {
+    const marked = !!studyState.bookmarks[button.dataset.studyBookmark];
+    button.setAttribute("aria-pressed", String(marked));
+    button.textContent = marked ? "ブックマーク済み（解除）" : "ブックマークする";
+  });
+}
+
+function showCourses(openId) {
+  showPanel("学習講座", studyOverview() +
+    "<p>講座のタイトルを押すと開閉します。各講座の末尾で学習記録を保存できます。</p>" +
+    courseList.map((c, index) => `<details class="result-item study-course" id="${courseIds[index]}" ${openId === courseIds[index] ? "open" : ""}>
+      <summary style="cursor: pointer; padding: 8px 0;"><strong>${escapeStudyText(c[0])}：${escapeStudyText(c[1])}</strong></summary>
+      <p>${escapeStudyText(c[2])}</p>
+      ${c[3] || "<p class='note'>講座本文は準備中です。</p>"}
+      ${courseStudyTools(index)}
+    </details>`).join(""));
+  panelBody.querySelectorAll("[data-study-note]").forEach(input => {
+    input.value = studyState.notes[input.dataset.studyNote] || "";
+  });
+  updateStudyControls();
+  if (openId) document.getElementById(openId).scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function showSavedStudy() {
+  const selected = courseList.map((course, index) => ({ course, id: courseIds[index] }))
+    .filter(item => studyState.bookmarks[item.id] || studyState.notes[item.id]);
+  showPanel("ブックマーク・メモ", studyOverview() +
+    (selected.length ? selected.map(({ course, id }) => `<article class="result-item">
+      <h3>${escapeStudyText(course[0])}：${escapeStudyText(course[1])}</h3>
+      <p>${studyState.bookmarks[id] ? "ブックマークあり" : "メモあり"}${studyState.completed[id] ? "・学習済み" : ""}</p>
+      ${studyState.notes[id] ? `<p class="study-saved-note">${escapeStudyText(studyState.notes[id])}</p>` : "<p>メモはまだありません。</p>"}
+      <div class="study-actions"><button type="button" class="study-button" data-study-open="${id}">講座を開いて編集する</button></div>
+    </article>`).join("") : "<p>まだブックマーク・メモはありません。学習講座を開き、末尾の学習記録から追加できます。</p>"));
+  updateStudyControls();
+}
+
+function canLeaveStudy() {
+  return !panelBody.querySelector('[data-study-note][data-dirty="true"]') ||
+    window.confirm("保存していないメモがあります。未保存の変更を破棄して移動しますか？");
+}
+
+panelBody.addEventListener("input", event => {
+  const input = event.target.closest("[data-study-note]");
+  if (!input) return;
+  const id = input.dataset.studyNote;
+  const dirty = input.value !== (studyState.notes[id] || "");
+  input.dataset.dirty = String(dirty);
+  document.getElementById("study-note-status-" + id).textContent = dirty ? "未保存の変更があります。" : "";
+});
+
+panelBody.addEventListener("change", event => {
+  const input = event.target.closest("[data-study-complete]");
+  if (!input) return;
+  const id = input.dataset.studyComplete;
+  const checked = input.checked;
+  saveStudyChange(next => {
+    if (checked) next.completed[id] = true;
+    else delete next.completed[id];
+  });
+});
+
+panelBody.addEventListener("click", event => {
+  const button = event.target.closest("button");
+  if (!button) return;
+  if (button.dataset.studyOpen) {
+    if (canLeaveStudy()) showCourses(button.dataset.studyOpen);
+  } else if (button.dataset.studyBookmark) {
+    const id = button.dataset.studyBookmark;
+    saveStudyChange(next => {
+      if (next.bookmarks[id]) delete next.bookmarks[id];
+      else next.bookmarks[id] = true;
+    });
+  } else if (button.dataset.studySave) {
+    const id = button.dataset.studySave;
+    const input = document.getElementById("study-note-" + id);
+    const message = document.getElementById("study-note-status-" + id);
+    if (input.value.length > 10000) {
+      message.textContent = "メモは10,000文字以内にしてください。";
+      return;
+    }
+    const saved = saveStudyChange(next => {
+      if (input.value) next.notes[id] = input.value;
+      else delete next.notes[id];
+    });
+    if (saved) input.dataset.dirty = "false";
+    message.textContent = saved ? "メモを保存しました。" : "保存できませんでした。入力内容をコピーして保管してください。";
+  } else if (button.dataset.studyDelete) {
+    const id = button.dataset.studyDelete;
+    const input = document.getElementById("study-note-" + id);
+    const message = document.getElementById("study-note-status-" + id);
+    if (!input.value && !studyState.notes[id]) {
+      message.textContent = "削除するメモはありません。";
+      return;
+    }
+    if (!window.confirm("この講座のメモを削除しますか？入力中の未保存の文章も削除します。")) return;
+    if (saveStudyChange(next => { delete next.notes[id]; })) {
+      input.value = "";
+      input.dataset.dirty = "false";
+      message.textContent = "メモを削除しました。";
+    } else {
+      message.textContent = "削除できませんでした。メモは残っています。";
+    }
+  }
+});
+
+window.addEventListener("beforeunload", event => {
+  if (panelBody.querySelector('[data-study-note][data-dirty="true"]')) {
+    event.preventDefault();
+    event.returnValue = "";
+  }
+});
+
+
 document.querySelectorAll("[data-target]").forEach(button => {
   button.addEventListener("click", () => {
     const target = button.dataset.target;
+    if (!canLeaveStudy()) return;
     if (target === "courses") {
-      showPanel(
-     "学習講座",
-     "<p>講座のタイトルを押すと内容が開きます。もう一度押すと閉じます。</p>" +
-     courseList.map(c => `
-       <details class="result-item">
-         <summary style="cursor: pointer; padding: 8px 0;">
-           <strong>${c[0]}：${c[1]}</strong>
-         </summary>
-         <p>${c[2]}</p>
-         ${c[3] || "<p class='note'>講座本文は、これから追加します。</p>"}
-       </details>
-     `).join("")
-   );
+      showCourses();
     } else if (target === "drugs") {
       showPanel("薬剤リファレンス", "<ul>" + drugData.slice(0,4).map(d => `<li><strong>${d.term}</strong><br>${d.body}</li>`).join("") + "</ul>");
     } else if (target === "conditions") {
@@ -652,7 +875,7 @@ document.querySelectorAll("[data-target]").forEach(button => {
     } else if (target === "quiz") {
       showPanel(quiz.title, quiz.html);
     } else if (target === "saved") {
-      showPanel("ブックマーク・メモ", "<p>スターター版では、まず画面構成を確認できます。次の開発段階で、端末内に保存するメモ・ブックマーク機能を追加します。</p><p class='note'>保存する情報は個人学習用の内容に限り、患者を特定できる情報は入力しないでください。</p>");
+      showSavedStudy();
     }
   });
 });
