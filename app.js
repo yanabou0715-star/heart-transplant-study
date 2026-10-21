@@ -1,5 +1,5 @@
 // 教材本文を分野別JSONに分け、講座IDで学習記録を引き継ぐ。
-const COURSE_FILES = ["./courses-immunity.json", "./courses-heart.json"];
+const COURSE_FILES = ["./courses-immunity.json", "./courses-heart.json", "./courses-acute.json"];
 let courseFields = [];
 let courseEntries = [];
 let courseList = [];
@@ -56,7 +56,8 @@ async function loadCourseData() {
       studyStorageError = "学習記録を読み取れませんでした。既存の記録を保護するため保存を停止しています。ブラウザの保存設定を確認してください。講座は引き続き読めます。";
     }
     courseDataReady = true;
-    showPanel("はじめに", "<p>「学習講座」で分野を選んでください。「免疫・移植後管理の基礎」10講座と、「移植心の特徴」3講座を学べます。</p><p>講座の末尾で学習済み・ブックマーク・メモを記録できます。用語検索から講座も探せます。</p><p class='note'>個人学習用です。診療判断は最新の資料、施設の手順と移植チームの指示に従ってください。教材版：2026年10月21日・分野別講座版。</p>");
+    const courseSummary = courseFields.map(field => `${escapeStudyText(field.title)}（${field.courses.length}講座）`).join("、");
+    showPanel("はじめに", `<p>「学習講座」で分野を選んでください。${courseSummary}を学べます。</p><p>講座の末尾で学習済み・ブックマーク・メモを記録できます。用語検索から講座も探せます。</p><p class="note">個人学習用です。診療判断は最新の資料、施設の手順と移植チームの指示に従ってください。教材版：2026年10月21日・術後急性期3講座追加。</p>`);
     return true;
   } catch (error) {
     // 読込失敗時にはlocalStorageへ書き込まない。
