@@ -578,9 +578,48 @@ const drugData = [
       "<strong>7. 出典</strong><br><a href='https://www.pmda.go.jp/PmdaSearch/iyakuDetail/800126_3999014M1022_3_42' target='_blank' rel='noopener noreferrer'>PMDA：プログラフカプセル0.5mg／1mg 電子添文（2026年6月改訂）</a><br><a href='https://www.pmda.go.jp/PmdaSearch/rdDetail/iyaku/3999014M1022_3?user=1' target='_blank' rel='noopener noreferrer'>PMDA：製品情報・患者向医薬品ガイド</a><br>資料確認日：2026年10月20日。製剤によって用法が異なるため、実際に使用する製剤の最新資料を確認してください。"
     ].join("<br><br>")
   },
-  { term: "シクロスポリン", aliases: "cyclosporine CNI", body: "カルシニューリン阻害薬。腎機能、血圧、電解質、血中濃度、歯肉増殖や多毛などを確認する。" },
-  { term: "ミコフェノール酸系製剤", aliases: "セルセプト mycophenolate MMF", body: "リンパ球の増殖を抑える。下痢などの消化器症状、血算、感染徴候を確認する。下痢は感染症の可能性も考える。" },
-  { term: "ステロイド", aliases: "プレドニゾロン prednisolone", body: "免疫・炎症反応を抑える。血糖、感染徴候、骨・筋肉、睡眠や気分の変化に注意し、自己判断で急に中断しない。" },
+  {
+    term: "シクロスポリン",
+    aliases: "cyclosporine ciclosporin CNI ネオーラル サンディミュン トラフ C0 C2",
+    body: [
+      "<strong>【学習用】</strong>個別の投与量・検査目標・処方変更は、最新の資料と患者の状態に基づき移植チームが判断します。副作用・相互作用は代表例です。",
+      "<strong>1. 作用</strong><br>カルシニューリン阻害薬（CNI）。T細胞の活性化とIL-2などの産生を抑え、拒絶反応を予防します。",
+      "<strong>2. 主な副作用</strong><br>腎障害、高血圧、高K・低Mg、振戦、多毛、歯肉肥厚（歯肉増殖）など。重い感染症や神経症状、悪性腫瘍にも注意します。",
+      "<strong>3. 観察項目</strong><br>腎機能・尿量、血圧、K・Mg、肝機能、血算、血中濃度、感染徴候、ふるえ、歯肉の変化を確認します。服薬状況と併用薬も合わせて報告します。",
+      "<strong>4. TDM（血中濃度モニタリング）</strong><br>服薬直前のC0（トラフ）を基本に、指示された採血条件を確認します。選択された患者では服薬2時間後のC2を用いることもありますが、C0と混同しません。製剤・服薬・採血時刻を記録し、目標値は一律に示しません。",
+      "<strong>5. 相互作用</strong><br>アゾール系抗真菌薬などで濃度が上がり、リファンピシンなどで下がることがあります。グレープフルーツジュースやセント・ジョーンズ・ワートにも注意。タクロリムス（外用剤を除く）との併用は禁忌で、一部のスタチンにも併用禁忌があります。追加・中止は医師・薬剤師に確認します。",
+      "<strong>6. 患者指導</strong><br>処方どおりに服薬し、製剤を自己判断で変更しません。口腔ケアを続け、歯肉の変化を相談します。尿量減少、強いふるえ、続く下痢・嘔吐などは速やかに相談し、けいれん・意識障害は緊急対応を優先します。",
+      "<strong>7. 出典</strong><br><a href='https://www.pmda.go.jp/PmdaSearch/rdDetail/iyaku/3999004M3021_2?user=1' target='_blank' rel='noopener noreferrer'>PMDA：ネオーラルの電子添文・患者向医薬品ガイド</a><br><a href='https://www.ishlt.org/education-and-publications/standards-guidelines-detail/ishlt-guidelines-for-the-care-of-heart-transplant-recipients' target='_blank' rel='noopener noreferrer'>ISHLT：心臓移植レシピエント管理ガイドライン（2023年掲載、薬物濃度モニタリング）</a><br>資料確認日：2026年10月21日。実際に使用する製剤の最新資料を確認してください。"
+    ].join("<br><br>")
+  },
+  {
+    term: "ミコフェノール酸系製剤",
+    aliases: "セルセプト mycophenolate MMF MPA ミコフェノール酸モフェチル IMPDH AUC",
+    body: [
+      "<strong>【学習用】</strong>個別の投与量・検査目標・処方変更は、最新の資料と患者の状態に基づき移植チームが判断します。副作用・相互作用は代表例です。",
+      "<strong>1. 作用</strong><br>ここではセルセプト（ミコフェノール酸モフェチル：MMF）を扱います。体内でMPAとなり、核酸合成に関わるIMPDHを阻害してT・Bリンパ球の増殖を抑えます。",
+      "<strong>2. 主な副作用</strong><br>下痢・腹痛・嘔吐、白血球減少・貧血・血小板減少、感染症など。消化管出血や悪性腫瘍にも注意します。催奇形性と流産のリスクがあり、妊婦・妊娠の可能性がある女性には禁忌です。",
+      "<strong>3. 観察項目</strong><br>血算、腎・肝機能、便の回数・性状、腹痛、食事・水分摂取、体重、出血・感染徴候を確認します。下痢を薬の副作用と決めつけず、感染症なども含めて報告します。",
+      "<strong>4. TDM（血中濃度モニタリング）</strong><br>測定対象は活性体MPAです。拒絶反応、副作用、併用薬変更などの状況により、移植チームが測定の必要性や方法を検討します。CNIと同じ感覚でトラフ値だけを用いて増減しません。AUC（一定時間の薬物曝露量）を評価する場合は、指定された複数の採血時刻を守ります。",
+      "<strong>5. 相互作用</strong><br>Mg・Al含有制酸剤や一部の抗菌薬などでMPA濃度が下がることがあります。シクロスポリンの変更もMPA曝露量に影響します。ガンシクロビル等との併用にも注意し、自己判断で服用間隔や処方を変えません。生ワクチンは併用禁忌です。",
+      "<strong>6. 患者指導</strong><br>自己判断で休薬・増減せず、続く下痢、発熱、出血などは速やかに相談します。妊娠を希望するときは男女とも事前に相談し、避妊・妊娠検査は最新の患者向ガイドと指示に従います。妊娠の可能性が分かったら直ちに処方医へ連絡し、服薬の対応を確認します。",
+      "<strong>7. 出典</strong><br><a href='https://www.pmda.go.jp/PmdaSearch/rdDetail/iyaku/3999017B1025_1?user=1' target='_blank' rel='noopener noreferrer'>PMDA：セルセプトの電子添文・患者向医薬品ガイド・妊娠関連資材</a><br><a href='https://www.ishlt.org/education-and-publications/standards-guidelines-detail/ishlt-guidelines-for-the-care-of-heart-transplant-recipients' target='_blank' rel='noopener noreferrer'>ISHLT：心臓移植レシピエント管理ガイドライン（2023年掲載、薬物濃度モニタリング）</a><br><a href='https://pubmed.ncbi.nlm.nih.gov/40987557/' target='_blank' rel='noopener noreferrer'>MPAのTDM診療ガイドライン（2025年、臓器移植全般）</a><br>資料確認日：2026年10月21日。他のミコフェノール酸製剤に同じ用量・評価方法を当てはめません。"
+    ].join("<br><br>")
+  },
+  {
+    term: "ステロイド",
+    aliases: "プレドニゾロン プレドニン prednisolone corticosteroid 副腎皮質ステロイド 副腎不全",
+    body: [
+      "<strong>【学習用】</strong>個別の投与量・検査目標・処方変更は、最新の資料と患者の状態に基づき移植チームが判断します。副作用・相互作用は代表例です。",
+      "<strong>1. 作用</strong><br>ここでは経口プレドニゾロン（プレドニン）を例に扱います。細胞内受容体を介して炎症・免疫反応を抑えます。維持療法と拒絶反応治療では薬剤や投与方法が異なるため、処方目的を確認します。",
+      "<strong>2. 主な副作用</strong><br>感染症、高血糖、血圧上昇・浮腫、消化管潰瘍、骨粗鬆症・筋力低下、不眠・気分や精神状態の変化、白内障・緑内障など。長期投与では副腎機能抑制にも注意します。",
+      "<strong>3. 観察項目</strong><br>血糖、血圧、体重・浮腫、感染徴候、睡眠・気分、筋力、骨・関節症状、視覚変化を確認します。強い腹痛、黒い便や吐血などは速やかに報告します。",
+      "<strong>4. TDM（血中濃度モニタリング）</strong><br>CNIのように通常の管理でトラフ濃度目標を設定する薬ではありません。投与量・期間、拒絶反応や症状、副作用を総合して評価します。副腎機能の検査を行う場合も、薬物濃度測定とは区別します。",
+      "<strong>5. 相互作用</strong><br>リファンピシンなどで作用が弱まることがあり、糖尿病治療薬の効果にも影響します。Kを失わせる利尿薬との併用では低Kに注意します。他院薬・市販薬・ワクチンも、追加前に医師・薬剤師へ相談します。",
+      "<strong>6. 患者指導</strong><br>連用後に急に中止すると副腎不全や離脱症状につながるため、減量・中止は医師の指示に従います。手術・重い体調不良時は服用中と伝え、嘔吐で飲めない場合も速やかに相談します。水痘・麻疹への接触が疑われるときも早急に連絡します。",
+      "<strong>7. 出典</strong><br><a href='https://www.pmda.go.jp/PmdaSearch/rdDetail/iyaku/2456001F1310_4?user=1' target='_blank' rel='noopener noreferrer'>PMDA：プレドニン錠5mgの電子添文・患者向医薬品ガイド</a><br><a href='https://www.ishlt.org/education-and-publications/standards-guidelines-detail/ishlt-guidelines-for-the-care-of-heart-transplant-recipients' target='_blank' rel='noopener noreferrer'>ISHLT：心臓移植レシピエント管理ガイドライン（2023年掲載、薬物濃度モニタリング）</a><br>資料確認日：2026年10月21日。他のステロイドや注射製剤は、それぞれの最新資料を確認してください。"
+    ].join("<br><br>")
+  },
   { term: "DSA", aliases: "ドナー特異的抗体 抗体関連型拒絶反応 AMR", body: "ドナーに対する特異的抗体。陽性だけで抗体関連型拒絶反応が確定するわけではなく、推移、心筋生検、心機能、臨床経過と合わせて評価する。" },
   { term: "CMV", aliases: "サイトメガロウイルス 感染症", body: "移植後に問題となるウイルス感染症の一つ。症状、血液検査、施設の予防・監視方針を確認する。" },
   { term: "TDM", aliases: "薬物血中濃度モニタリング トラフ", body: "薬物血中濃度を測定し、効果と毒性のバランスを確認する。採血時刻と服薬時刻、処方変更、相互作用、臨床症状を合わせて解釈する。" }
