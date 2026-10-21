@@ -627,13 +627,82 @@ const drugData = [
 
 const conditions = {
   title: "拒絶反応・感染症",
-  html: `<h3>拒絶反応を考えるとき</h3>
-    <ul><li>症状、心機能、心電図、心エコー、心筋生検、DSAの推移を総合する。</li>
-    <li>DSA陽性だけでAMRと断定しない。</li><li>心エコーに明らかな変化がなくても、拒絶反応を完全には否定できない。</li></ul>
-    <h3>感染症を考えるとき</h3>
-    <ul><li>発熱が目立たない場合もある。咳、呼吸困難、SpO₂低下、下痢、創部の変化などを確認する。</li>
-    <li>感染症と拒絶反応の両方を鑑別に挙げ、移植チームへ相談する。</li></ul>
-    <p class="note">これは学習用の要約です。緊急時は施設の手順に従い、移植チームへ速やかに連絡してください。</p>`
+  html: `
+    <p class="note">個人学習用の要約です。症状だけで診断せず、実際の対応は所属施設の手順と移植チームの指示を優先してください。</p>
+    <h3>緊急性を先に確認する</h3>
+    <p><strong>強い呼吸困難、意識の異常、失神、急速な全身状態の悪化などは、情報を集め終える前に救急対応を優先します。</strong>院内では緊急時手順に従い、自宅では救急要請など必要な対応を行ってください。</p>
+    <p>新しい息切れ、胸痛、続く下痢・嘔吐、尿量減少、強いだるさなども速やかに移植チームへ相談します。免疫抑制薬を自己判断で中止・増減しません。（出典1・2）</p>
+
+    <details class="study-course">
+      <summary style="cursor: pointer; padding: 12px 0;">1. 症状があるときの確認事項</summary>
+      <ul>
+        <li><strong>普段との違い：</strong>いつから、どのように変化したか。呼吸、意識、活動性、食事・水分摂取、体重・浮腫、尿量を確認します。</li>
+        <li><strong>測定値と条件：</strong>体温、血圧、脈拍、呼吸数、SpO₂の値と推移。酸素使用の有無なども伝えます。</li>
+        <li><strong>移植・治療歴：</strong>移植後の時期、最近の拒絶反応治療、感染症、処方変更を確認します。</li>
+        <li><strong>服薬：</strong>製剤・最終服薬時刻、飲み忘れ、嘔吐後の服薬状況、新しい薬・市販薬・サプリメントを確認します。</li>
+      </ul>
+      <p>検査値は採取時刻と以前の値を合わせて読み、不明な情報は「未確認」として伝えます。状態が悪ければ、確認のために連絡を遅らせません。（出典1〜3）</p>
+    </details>
+
+    <details class="study-course">
+      <summary style="cursor: pointer; padding: 12px 0;">2. 拒絶反応：ACR・AMRと検査の見方</summary>
+      <ul>
+        <li><strong>ACR（急性細胞性拒絶反応）：</strong>主にT細胞が関わる反応です。</li>
+        <li><strong>AMR（抗体関連型拒絶反応）：</strong>抗体が関わり、移植心の血管などに障害を起こす反応です。</li>
+        <li><strong>心筋生検：</strong>採取した組織の病理所見を評価します。ACRとAMRは評価の枠組みが異なります。</li>
+        <li><strong>DSA：</strong>ドナー特異的抗体。陽性だけでAMRと断定せず、新規出現・持続や推移を病理所見・心機能と合わせて評価します。</li>
+        <li><strong>心エコー：</strong>心機能の変化をみる重要な検査ですが、明らかな変化がないことだけで拒絶反応を完全には否定できません。</li>
+      </ul>
+      <p>息切れ、倦怠感、浮腫・体重増加などに注意します。症状が乏しくても検査で見つかることがあるため、服薬と予定された診察・検査の継続が大切です。治療の要否・内容は移植チームが判断します。（出典1・2）</p>
+    </details>
+
+    <details class="study-course">
+      <summary style="cursor: pointer; padding: 12px 0;">3. 感染症：症状と薬の影響を合わせて考える</summary>
+      <p>免疫抑制療法中は感染リスクが高まり、典型的な症状がそろわないこともあります。発熱がないことだけで感染症を否定しません。移植直後に限らず、長期経過中や拒絶反応治療後も注意します。</p>
+      <ul>
+        <li>咳・痰・息切れ、下痢・嘔吐・腹痛、排尿時の症状、創部・カテーテル部の発赤や排液などを確認します。</li>
+        <li>下痢は感染症、薬剤など複数の原因が考えられます。脱水やタクロリムス濃度の変動にも注意します。</li>
+        <li>感染症と拒絶反応の症状は似ることがあり、両者が併存する可能性もあります。</li>
+      </ul>
+      <p>必要な培養・画像・血液検査等は医療チームが判断します。抗菌薬の追加や免疫抑制薬の調整を自己判断せず、症状・検査・服薬状況をまとめて相談します。（出典1〜3）</p>
+    </details>
+
+    <details class="study-course">
+      <summary style="cursor: pointer; padding: 12px 0;">4. CMV：感染と疾患を区別する</summary>
+      <p>CMV（サイトメガロウイルス）は、移植後に再活性化したり、ドナー由来で感染したりすることがあります。</p>
+      <ul>
+        <li><strong>CMV感染：</strong>症状の有無にかかわらず、ウイルス増殖の証拠が確認される状態です。</li>
+        <li><strong>CMV疾患：</strong>CMV感染の証拠と、それに起因する症状・臓器障害がある状態です。検査陽性だけで臓器病変と断定しません。</li>
+        <li><strong>予防：</strong>予防薬の投与や、定期検査をもとに早期治療する方法などがあり、リスクと施設の方針によって選ばれます。</li>
+      </ul>
+      <p>検査結果の推移、発熱・倦怠感・消化器症状、血算、腎機能、予防薬・治療薬の服用状況を確認します。検査方法・治療開始基準・予防期間を一律に示さず、移植チームの計画を確認します。（出典1・4）</p>
+    </details>
+
+    <details class="study-course">
+      <summary style="cursor: pointer; padding: 12px 0;">5. PJP：呼吸症状と予防薬を確認する</summary>
+      <p>PJP（ニューモシスチス肺炎、PCPとも表記）は、真菌であるPneumocystis jiroveciiによる肺炎で、免疫抑制療法中に問題となります。咳、息切れ、低酸素などに注意します。</p>
+      <p>予防にはST合剤（スルファメトキサゾール・トリメトプリム）などが用いられます。予防薬の有無・服用状況と処方された検査計画を確認し、中止・再開は移植チームに相談します。予防中でも新しい呼吸症状を放置しません。症状だけでPJPと判断せず、必要な検査で評価します。（出典1・5）</p>
+    </details>
+
+    <details class="study-course">
+      <summary style="cursor: pointer; padding: 12px 0;">6. 移植チームへの報告例（架空の場面）</summary>
+      <p><strong>状況：</strong>心臓移植後の患者さんに、今朝から新しい息切れと下痢がみられます。普段と違うため相談します。</p>
+      <p><strong>背景：</strong>移植後の時期、最近の拒絶反応治療、免疫抑制薬と予防薬、最終服薬時刻、新しい薬の有無を伝えます。</p>
+      <p><strong>現在の所見：</strong>呼吸・意識の状態、測定したバイタルサインと酸素使用条件、下痢の回数、尿量・摂取状況、確認できた検査値と採血時刻を伝えます。未確認の項目はそのまま伝えます。</p>
+      <p><strong>相談：</strong>感染症や拒絶反応、薬剤の影響などの評価が必要と考えています。受診・診察の緊急性と、必要な観察・検査・服薬について指示をお願いします。</p>
+      <p class="note">これは報告の組み立て方を示す学習例です。情報を集めきるまで救急対応を待つための手順ではありません。このアプリに実際の患者情報は入力しないでください。</p>
+    </details>
+
+    <h3>出典・確認先</h3>
+    <ol>
+      <li><a href="https://www.ishlt.org/education-and-publications/standards-guidelines-detail/ishlt-guidelines-for-the-care-of-heart-transplant-recipients" target="_blank" rel="noopener noreferrer">ISHLT：心臓移植レシピエント管理ガイドライン（2023年掲載）</a></li>
+      <li><a href="https://www.nhsbt.nhs.uk/organ-transplantation/heart/living-with-a-heart-transplant/warning-signs-after-a-heart-transplant/" target="_blank" rel="noopener noreferrer">NHSBT：心臓移植後の注意すべき症状</a>／<a href="https://www.nhsbt.nhs.uk/organ-transplantation/heart/benefits-and-risks-of-a-heart-transplant/risks-of-a-heart-transplant/rejection-of-a-transplanted-heart/" target="_blank" rel="noopener noreferrer">拒絶反応</a>／<a href="https://www.nhsbt.nhs.uk/organ-transplantation/heart/benefits-and-risks-of-a-heart-transplant/risks-of-a-heart-transplant/infections-and-heart-transplants/" target="_blank" rel="noopener noreferrer">感染症</a></li>
+      <li><a href="https://www.newcastle-hospitals.nhs.uk/resources/infection-after-a-transplant/" target="_blank" rel="noopener noreferrer">Newcastle Hospitals：移植後の感染症</a>（小児向け資料。症状・服薬への影響を参照し、数値基準や生活制限は転用していません。）</li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12180710/" target="_blank" rel="noopener noreferrer">CMV管理に関する第4回国際コンセンサスガイドライン（2025年）</a></li>
+      <li><a href="https://www.cdc.gov/pneumocystis-pneumonia/about/index.html" target="_blank" rel="noopener noreferrer">CDC：Pneumocystis Pneumonia Basics</a></li>
+    </ol>
+    <p class="note">資料確認日：2026年10月21日。この画面は診断・治療手順を網羅するものではありません。第4・5・9回の講座も合わせて復習してください。</p>
+`
 };
 
 const quizSources = [
