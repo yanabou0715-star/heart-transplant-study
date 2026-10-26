@@ -1,5 +1,5 @@
 // 教材本文を分野別JSONに分け、講座IDで学習記録を引き継ぐ。
-const COURSE_FILES = ["./courses-immunity.json", "./courses-heart.json", "./courses-acute.json", "./courses-recovery.json", "./courses-longterm.json"];
+const COURSE_FILES = ["./courses-immunity.json", "./courses-heart.json", "./courses-acute.json", "./courses-recovery.json", "./courses-longterm.json", "./courses-waiting.json"];
 let courseFields = [];
 let courseEntries = [];
 let courseList = [];
@@ -57,7 +57,7 @@ async function loadCourseData() {
     }
     courseDataReady = true;
     const courseSummary = courseFields.map(field => `${escapeStudyText(field.title)}（${field.courses.length}講座）`).join("、");
-    showPanel("はじめに", `<p>「学習講座」で分野を選んでください。${courseSummary}を学べます。</p><p>講座の末尾で学習済み・ブックマーク・メモを記録できます。用語検索から講座も探せます。</p><p class="note">個人学習用です。診療判断は最新の資料、施設の手順と移植チームの指示に従ってください。教材版：2026年10月26日・全37講座・外来と遠隔期管理9講座。</p>`);
+    showPanel("はじめに", `<p>「学習講座」で分野を選んでください。${courseSummary}を学べます。</p><p>講座の末尾で学習済み・ブックマーク・メモを記録できます。用語検索から講座も探せます。</p><p class="note">個人学習用です。診療判断は最新の資料、施設の手順と移植チームの指示に従ってください。教材版：2026年10月26日・全40講座・移植前と待機期の支援3講座を追加。</p>`);
     return true;
   } catch (error) {
     // 読込失敗時にはlocalStorageへ書き込まない。
