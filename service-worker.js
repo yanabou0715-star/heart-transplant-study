@@ -1,6 +1,6 @@
 // 通信できるときは公開中の教材を確認し、通信できないときは保存済みの教材を使う。
-const CACHE_NAME = "transplant-study-v26";
-const APP_FILES = ["./index.html", "./styles.css", "./app.js", "./manifest.json", "./courses-immunity.json", "./courses-heart.json", "./courses-acute.json", "./courses-recovery.json", "./courses-longterm.json", "./courses-waiting.json"];
+const CACHE_NAME = "transplant-study-v27";
+const APP_FILES = ["./index.html", "./styles.css", "./app.js", "./manifest.json", "./courses-immunity.json", "./courses-heart.json", "./courses-acute.json", "./courses-recovery.json", "./courses-longterm.json", "./courses-waiting.json", "./apple-touch-icon-orange-v1.png", "./icon-orange-v1-192.png", "./icon-orange-v1-512.png"];
 const APP_BASE = new URL(self.registration.scope);
 const APP_URLS = APP_FILES.map(path => new URL(path, APP_BASE).href);
 const INDEX_URL = APP_URLS[0];
