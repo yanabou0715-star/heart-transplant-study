@@ -57,7 +57,7 @@ async function loadCourseData() {
     }
     courseDataReady = true;
     const courseSummary = courseFields.map(field => `${escapeStudyText(field.title)}（${field.courses.length}講座）`).join("、");
-    showPanel("はじめに", `<p>「学習講座」で分野を選んでください。${courseSummary}を学べます。</p><p>講座の末尾で学習済み・ブックマーク・メモを記録できます。用語検索から講座も探せます。</p><p class="note">個人学習用です。診療判断は最新の資料、施設の手順と移植チームの指示に従ってください。教材版：2026年10月26日・全43講座・移植前と待機期の支援6講座。</p>`);
+    showPanel("はじめに", `<p>「学習講座」で分野を選んでください。${courseSummary}を学べます。</p><p>講座の末尾で学習済み・ブックマーク・メモを記録できます。用語検索から講座も探せます。</p><p class="note">個人学習用です。診療判断は最新の資料、施設の手順と移植チームの指示に従ってください。教材版：2026年10月26日・全43講座・症例問題12問（総合症例6問追加）。</p>`);
     return true;
   } catch (error) {
     // 読込失敗時にはlocalStorageへ書き込まない。
@@ -220,6 +220,30 @@ const quizSources = [
   [
     "AHRQ：Teach-Back",
     "https://www.ahrq.gov/teamstepps-program/curriculum/communication/tools/teachback.html"
+  ],
+  [
+    "JCS／JSCVS／JATS／JSVS：植込型LVAD治療ガイドライン（2021年、感染と連携）",
+    "https://www.jstage.jst.go.jp/article/circj/86/6/86_CJ-21-0880/_html/-char/en"
+  ],
+  [
+    "NHSBT：心臓移植施設での術後管理と観察",
+    "https://www.nhsbt.nhs.uk/organ-transplantation/heart/at-the-transplant-centre/recovery-at-the-transplant-centre/"
+  ],
+  [
+    "EAPC／HFA／ESOT：心臓移植後の予防・リハビリテーション（2024年、主に成人）",
+    "https://www.frontierspartnerships.org/journals/transplant-international/articles/10.3389/ti.2024.13191/full"
+  ],
+  [
+    "NHSBT：心臓・肺移植後の食品安全",
+    "https://www.nhsbt.nhs.uk/organ-transplantation/resources/food-safety-advice-after-a-heart-or-lung-transplant/"
+  ],
+  [
+    "IPTA：小児固形臓器移植後のEBV量監視コンセンサス（2024年巻号掲載）",
+    "https://pubmed.ncbi.nlm.nih.gov/37294621/"
+  ],
+  [
+    "Pediatric Heart Transplant Society：小児から成人医療への移行ガイド活用法",
+    "https://pediatrichearttransplantsociety.org/transition-guidebook/"
   ]
 ];
 
@@ -295,6 +319,84 @@ const quizQuestions = [
     "answer": 0,
     "explanation": "ティーチバックでは患者さん自身の言葉で説明してもらい、こちらの説明が伝わったかを確かめます。患者さんを試すためではありません。伝わっていなければ説明を変えて、もう一度確認します。",
     "source": 2
+  },
+  {
+    "topic": "総合症例・成人①：待機中のVAD感染",
+    "question": "VADで心臓移植を待機中の成人です。ドライブライン周囲の発赤と排液が増えましたが、発熱や機器のアラームはありません。管理施設と移植施設は別です。最初の対応として適切なのは？",
+    "options": [
+      "機器が正常で発熱もないため、次の定期受診で相談する",
+      "局所・全身の変化と時期、治療歴を確認して管理チームへ早めに連絡し、移植側への共有も確認する",
+      "局所の変化は移植には関係しないので、管理施設内だけで情報を完結する"
+    ],
+    "answer": 1,
+    "explanation": "観察：局所の発赤・排液・痛みと全身症状を見ます。確認：発症時期、過去の菌や治療、現在の薬・機器の情報を整理します。報告・相談：VAD管理チームへ早めに連絡し、移植側にも経過が伝わるようにします。アラームや発熱がないことだけで感染を否定せず、感染の範囲・治療や待機の扱いは専門チームが評価します。",
+    "source": 3,
+    "reviewCourse": "waiting-vad-coordination"
+  },
+  {
+    "topic": "総合症例・成人②：術後の循環変化",
+    "question": "心臓移植後、ICUで管理中の成人です。血圧が下がり、尿量が減ってきました。「術直後なのでよくある変化」と言われましたが、以前より末梢も冷たくなっています。適切な初期対応は？",
+    "options": [
+      "安全を確保し、変化と時刻を直ちに報告して応援・評価を求め、呼吸・循環、出血や機器等を並行して確認する",
+      "原因をPGDと決め、他の原因を調べずに経過を記録する",
+      "必要な検査と観察項目をすべて集め終わるまで報告を待つ"
+    ],
+    "answer": 0,
+    "explanation": "観察：血圧だけでなく、尿量・末梢灌流・呼吸等の経時変化を合わせます。確認：測定条件、出血・ドレーン、投薬や機器の変化などをチームで確認します。報告・相談：新しい循環悪化として速やかに報告し、情報を集めながら評価・対応を進めます。完全な情報がそろうのを待たず、心機能不全、出血・圧迫等を含む原因評価を専門チームにつなげます。看護側でPGDと断定したり機器・薬剤を独自に変更したりしません。",
+    "source": 4,
+    "reviewCourse": "acute-observation-report"
+  },
+  {
+    "topic": "総合症例・成人③：除神経心と運動",
+    "question": "移植後の成人が歩行練習中です。腕時計の心拍数はあまり増えていませんが、普段より強い息切れと疲労があります。本人は「脈が上がらないので、もっと速く歩きたい」と話しています。どう支援しますか？",
+    "options": [
+      "年齢から計算した目標心拍数に届くまで、歩く速度を上げる",
+      "除神経心なら息切れは評価できないため、予定距離の達成を優先する",
+      "負荷を下げる・中止するなど安全を確保し、症状、指示された指標と回復を確認してチームに相談する"
+    ],
+    "answer": 2,
+    "explanation": "観察：息切れ・疲労、血圧等の指示された指標と回復を見ます。確認：普段との違い、当日の体調・処方、活動計画を確認します。報告・相談：新しい耐容能低下は相談し、心拍数だけで負荷を増やしません。除神経により運動への心拍応答が遅れる場合があり、準備・整理運動と個別の運動処方が必要です。強い・持続する症状では体調悪化として評価につなげます。",
+    "source": 5,
+    "reviewCourse": "recovery-exercise-life"
+  },
+  {
+    "topic": "総合症例・小児①：食品安全と成長",
+    "question": "経口摂取を許可された移植後の患児です。家族は「生ものが怖いので野菜や果物は全部やめ、好きな半熟卵を食べさせたい。体重が増えたので栄養は十分」と話しています。適切な支援は？",
+    "options": [
+      "食事制限を守るため、野菜・果物を一律に禁止し体重だけで栄養を判定する",
+      "卵は十分に加熱した料理へ替え、野菜・果物の扱いは個別指導で確認し、摂取・身長や成長の経過も栄養士と評価する",
+      "新鮮な卵なら半熟でもよいため、本人の好物を優先する"
+    ],
+    "answer": 1,
+    "explanation": "観察：食事の内容・量、身長と体重の経過、成長・摂食の様子を確認します。確認：卵は黄身・白身まで加熱し、野菜・果物は十分な洗浄や必要な調理と施設の指導に沿って選びます。報告・相談：必要な栄養が取れる代替料理を栄養士と考え、家族や給食・弁当へつなげます。生の肉・魚と野菜・果物を一律に扱わず、体重だけで成長を判断しません。",
+    "source": 6,
+    "reviewCourse": "recovery-food-metabolism-growth"
+  },
+  {
+    "topic": "総合症例・小児②：EBV量とPTLD",
+    "question": "移植後の患児で、血中EBV量が前回より上昇しました。保護者は「がんになったのですね。免疫抑制薬をやめたい」と話しています。適切な初期支援は？",
+    "options": [
+      "EBV量が増えたのでPTLDと確定し、その前提だけで説明を進める",
+      "症状がなければEBV量の変化は無視してよいと伝える",
+      "不安を聞き、検体・検査法と推移、体調を確認してチームへ共有し、自己中止せず評価を受けるよう支援する"
+    ],
+    "answer": 2,
+    "explanation": "観察：発熱、腫れ、食欲・体重や腹部症状等の変化を確認します。確認：検体・検査法、採血時期とこれまでの推移を合わせます。報告・相談：EBV DNAemia単独ではPTLDを診断できず、専門チームが追加評価を判断することを説明します。数値の変化を無視せず、免疫抑制の調整と拒絶反応リスクを専門チームで検討します。保護者の自己判断による中止は避けます。",
+    "source": 7,
+    "reviewCourse": "longterm-malignancy-ptld"
+  },
+  {
+    "topic": "総合症例・思春期：成人医療への引き継ぎ",
+    "question": "成人診療へ移る予定の移植後の若者です。紹介状は渡されましたが、本人は初回予約を知らず、免疫抑制薬の残りも少なくなっています。家族は「もう成人なので全部本人に任せたい」と話しています。優先する支援は？",
+    "options": [
+      "残薬と服薬、初回予約・処方担当・必要な検査を確認して双方の窓口につなぎ、本人と家族の役割を調整する",
+      "紹介状を渡したので移行は完了として、本人から問い合わせるまで待つ",
+      "薬が足りるよう、受診まで服薬回数を本人の判断で減らしてもらう"
+    ],
+    "answer": 0,
+    "explanation": "観察：受診・服薬を実行できているか、困りごとを聞きます。確認：残薬、実際の服薬、初回受診、処方担当と必要な検査、連絡先を具体化します。報告・相談：薬が途切れないよう小児側・成人側につなぎ、本人ができる部分と支援が必要な部分を調整します。移行は紹介状の送付や年齢だけで完了せず、段階的に準備と継続を確認します。",
+    "source": 8,
+    "reviewCourse": "longterm-transition-adult"
   }
 ];
 let quizAnswers = {};
@@ -310,7 +412,7 @@ function updateQuizScore() {
 function showQuiz() {
   quizAnswers = {};
   showPanel("症例問題・復習", `
-    <p>全${quizQuestions.length}問です。各問で答えを選ぶと解説が表示されます。</p>
+    <p>全${quizQuestions.length}問です。第1〜6問は基礎の復習、第7〜12問は成人・小児の総合症例です。答えを選ぶと解説が表示されます。総合症例は解説後のボタンから関連講座を復習できます。</p>
     <p class="note">学習用の架空の場面です。実際の判断は最新の資料、施設の手順と移植チームの指示に従ってください。点数は学習の目安で、臨床能力の判定ではありません。回答はこの画面を離れるとリセットされます。</p>
     <p id="quiz-score" role="status"></p>
     ${quizQuestions.map((question, index) => `
@@ -321,9 +423,10 @@ function showQuiz() {
           ${question.options.map((option, choice) => `<button type="button" class="quiz-option" data-question="${index}" data-choice="${choice}" aria-describedby="quiz-feedback-${index}">${["A", "B", "C"][choice]}. ${option}</button>`).join("")}
         </div>
         <div id="quiz-feedback-${index}" class="quiz-feedback" aria-live="polite"></div>
+        <div id="quiz-review-${index}"></div>
       </section>`).join("")}
     <button type="button" id="quiz-reset" class="study-button">もう一度解く</button>
-    <details class="quiz-sources"><summary>出典（確認日：2026年10月21日）</summary>
+    <details class="quiz-sources"><summary>出典（既存問：2026年10月21日／総合症例追加：2026年10月26日）</summary>
       <ol>${quizSources.map(source => `<li><a href="${source[1]}" target="_blank" rel="noopener noreferrer">${source[0]}</a></li>`).join("")}</ol>
     </details>`);
   updateQuizScore();
@@ -342,6 +445,11 @@ function showQuiz() {
       feedback.className = "quiz-feedback result-item";
       feedback.textContent = (choice === question.answer ? "正解です。" : "不正解です。") +
         `正解は${["A", "B", "C"][question.answer]}。${question.explanation}（出典${question.source + 1}）`;
+      const review = document.getElementById(`quiz-review-${index}`);
+      const entry = courseEntries.find(item => item.id === question.reviewCourse);
+      if (review && entry) {
+        review.innerHTML = `<button type="button" class="study-button" data-study-open="${entry.id}">関連講座を復習：${escapeStudyText(entry.fieldTitle)} ${escapeStudyText(entry.course[0])}「${escapeStudyText(entry.course[1])}」</button>`;
+      }
       updateQuizScore();
     });
   });
