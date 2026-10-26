@@ -57,7 +57,7 @@ async function loadCourseData() {
     }
     courseDataReady = true;
     const courseSummary = courseFields.map(field => `${escapeStudyText(field.title)}（${field.courses.length}講座）`).join("、");
-    showPanel("はじめに", `<p>「学習講座」で分野を選んでください。${courseSummary}を学べます。</p><p>講座の末尾で学習済み・ブックマーク・メモを記録できます。用語検索から講座も探せます。</p><p class="note">個人学習用です。診療判断は最新の資料、施設の手順と移植チームの指示に従ってください。教材版：2026年10月26日・全43講座・症例問題12問（総合症例6問追加）。</p>`);
+    showPanel("はじめに", `<p>「学習講座」で分野を選んでください。${courseSummary}を学べます。</p><p>講座の末尾で学習済み・ブックマーク・メモを記録できます。用語検索から講座も探せます。</p>${learningToolNav()}<p class="note">個人学習用です。診療判断は最新の資料、施設の手順と移植チームの指示に従ってください。教材版：2026年10月26日・全43講座・症例問題12問。場面別の入口・説明練習・図解を追加。</p>`);
     return true;
   } catch (error) {
     // 読込失敗時にはlocalStorageへ書き込まない。
@@ -551,6 +551,30 @@ studyStyle.textContent = `
   .study-error { color: #8b1c1c; background: #fff1f1; padding: 10px; border-radius: 8px; }
   .study-saved-note { white-space: pre-wrap; overflow-wrap: anywhere; }
   .study-course { margin-bottom: 10px; }
+
+  .learning-cards { display: grid; gap: 16px; }
+  .learning-card { border: 1px solid #dce5f0; border-radius: 14px; padding: 16px; margin: 16px 0; background: #fff; overflow-wrap: anywhere; }
+  .learning-cards > .learning-card { margin: 0; }
+  .learning-card h3 { line-height: 1.55; }
+  .learning-card h4 { font-size: .94rem; margin: 18px 0 6px; }
+  .learning-card summary { min-height: 44px; cursor: pointer; padding: 10px 0; font-weight: 700; }
+  .learning-card summary:focus-visible { outline: 3px solid #8bb7ff; outline-offset: 2px; }
+  .learning-course-links { display: grid; gap: 8px; margin: 12px 0; }
+  .learning-course-links button { text-align: left; white-space: normal; overflow-wrap: anywhere; }
+  .learning-quote { border-left: 4px solid #2459a9; background: #f2f6ff; padding: 12px; }
+  .learning-sources { margin-top: 16px; font-size: .86rem; }
+  .learning-figure { margin: 12px 0; }
+  .learning-figure figcaption { margin-bottom: 12px; font-weight: 700; }
+  .learning-flow { list-style: none; padding: 0 !important; margin: 0 !important; display: grid; gap: 28px; }
+  .learning-flow li { position: relative; margin: 0 !important; border: 1px solid #b9cde8; border-radius: 12px; background: #f2f6ff; padding: 14px; }
+  .learning-flow li + li::before { content: "↓"; position: absolute; top: -29px; left: calc(50% - 8px); font-size: 22px; line-height: 27px; color: #2459a9; }
+  .learning-concepts { gap: 12px; }
+  .learning-concepts li + li::before { display: none; }
+  .learning-flow p, .learning-branches p { margin: 6px 0 0; }
+  .learning-branches { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px; margin-top: 16px; }
+  .learning-branches > div { border: 2px solid #b58b31; border-radius: 12px; background: #fff8ec; padding: 14px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
 `;
 document.head.appendChild(studyStyle);
 
@@ -733,12 +757,107 @@ window.addEventListener("beforeunload", event => {
 });
 
 
+// 既存講座を横断して使う補助教材。講座本文・学習記録の形式は変更しない。
+const learningSources = {
+  food: ["NHSBT：心臓・肺移植後の食品安全", "https://www.nhsbt.nhs.uk/organ-transplantation/resources/food-safety-advice-after-a-heart-or-lung-transplant/"],
+  exercise: ["EAPC／HFA／ESOT：心臓移植後の予防・リハビリテーション（2024年、主に成人）", "https://www.frontierspartnerships.org/journals/transplant-international/articles/10.3389/ti.2024.13191/full"],
+  recovery: ["NHSBT：心臓移植施設での術後管理", "https://www.nhsbt.nhs.uk/organ-transplantation/heart/at-the-transplant-centre/recovery-at-the-transplant-centre/"],
+  warning: ["NHSBT：心臓移植後の注意すべき症状", "https://www.nhsbt.nhs.uk/organ-transplantation/heart/living-with-a-heart-transplant/warning-signs-after-a-heart-transplant/"],
+  infection: ["Newcastle Hospitals：移植後の感染症（小児向け。数値基準は転用しない）", "https://www.newcastle-hospitals.nhs.uk/resources/infection-after-a-transplant/"],
+  transition: ["PHTS：小児から成人医療への移行ガイド活用法", "https://pediatrichearttransplantsociety.org/transition-guidebook/"],
+  teachback: ["AHRQ：Teach-Back（説明の伝わり方を確認する方法）", "https://www.ahrq.gov/teamstepps-program/curriculum/communication/tools/teachback.html"],
+  ishlt: ["ISHLT：心臓移植レシピエント管理ガイドライン（2023年掲載、成人・小児）", "https://www.ishlt.org/education-and-publications/standards-guidelines-detail/ishlt-guidelines-for-the-care-of-heart-transplant-recipients"]
+};
+
+const learningScenes = [
+  { id: "food", title: "食事・栄養を説明したい", description: "食品安全と、栄養・成長を両立する視点を探す。", courses: ["acute-nutrition-mobility-family", "recovery-food-metabolism-growth", "longterm-kidney-metabolism", "waiting-nutrition-activity-growth"], practice: "food" },
+  { id: "medication", title: "服薬・採血・受診を支えたい", description: "服薬時刻、採血、生活への組み込みと継続支援を確認する。", courses: ["course-3", "course-8", "recovery-medication-tests", "longterm-followup-surveillance"], practice: "medication" },
+  { id: "activity", title: "活動・リハビリを考えたい", description: "移植心の反応から、離床・通学・生活復帰へつなげる。", courses: ["heart-exercise-response", "acute-nutrition-mobility-family", "recovery-exercise-life", "waiting-nutrition-activity-growth"], practice: "exercise" },
+  { id: "change", title: "体調変化の観察・報告を復習したい", description: "普段との違い、緊急性、連絡時に伝える情報を学ぶ。", courses: ["acute-observation-report", "recovery-observation-contact", "heart-symptoms-and-medicines", "waiting-vad-coordination"], practice: "warning" },
+  { id: "discharge", title: "退院・家庭・学校への準備をしたい", description: "本人だけでなく、両親・養育者や学校との共有も考える。", courses: ["recovery-medication-tests", "recovery-home-school-infection", "recovery-psychosocial-selfcare", "longterm-shared-care-preparedness"], practice: "transition" },
+  { id: "child", title: "小児・思春期・家族を支えたい", description: "成人・小児を併記した講座から、発達・成長・自立に関する内容へ進む。", courses: ["waiting-decision-family", "recovery-psychosocial-selfcare", "longterm-bone-growth", "longterm-transition-adult"], practice: "transition" },
+  { id: "acute", title: "術直後の循環・機器を理解したい", description: "グラフト機能、右心、ペーシング、出血を結び付ける。", courses: ["acute-graft-dysfunction", "acute-right-heart-fluid", "acute-arrhythmia-temporary-pacing", "acute-bleeding-tamponade"], practice: "pacing" },
+  { id: "followup", title: "外来・他院との連携を考えたい", description: "症状が乏しい時期の検査と、長期療養の引き継ぎを学ぶ。", courses: ["longterm-followup-surveillance", "longterm-cav", "heart-symptoms-and-medicines", "longterm-shared-care-preparedness"], practice: "warning" }
+];
+
+const explanationPractice = [
+  { id: "food", title: "なぜ刺身や半熟卵を避けるの？", prompt: "食べたいものを制限されて困っている本人・家族へ、理由と代わりの選択肢を説明してみましょう。", adult: "移植後の薬は拒絶反応を防ぐ一方で、感染と戦う力も弱めます。生や加熱不十分な肉・魚・卵は食中毒の危険があるため、十分に加熱した料理を選びましょう。食べられるものまで減らさず、栄養士と代わりの料理を考えます。", child: "お薬で、ばい菌から体を守る力が弱くなっています。お魚や卵は、中まで火を通したものを一緒に選ぼうね。", family: "野菜・果物まで一律に禁止する説明にせず、洗浄・必要な調理、施設の個別指導を確認します。身長・体重の推移や摂取量も見て、給食・弁当の代替を相談します。", check: ["感染の理由と、十分な加熱・食品衛生を結び付けた", "禁止だけで終わらず、代わりの食べ方を示した", "小児では成長と家庭・学校の実行しやすさを考えた"], teach: "私の説明が分かりやすかったか確認させてください。卵料理を選ぶとき、どのようなものにしますか？", sources: ["food"], courses: ["recovery-food-metabolism-growth"] },
+  { id: "medication", title: "元気なのに、なぜ薬と通院を続けるの？", prompt: "「調子がよいので薬を減らしたい」と話す方へ、継続する意味と困ったときの相談を説明してみましょう。", adult: "元気に過ごせていても、移植した心臓への拒絶反応を防ぐ治療は必要です。症状だけでは分からない変化もあるので、薬と予定の受診・検査を続けます。副作用や飲みにくさ、薬が足りないなどの困りごとは、自己判断で減らさずチームへ相談しましょう。", child: "元気な心臓を守るためのお薬だよ。飲みにくい、気持ち悪い、忘れそうと思ったら、ひとりでやめずに大人や病院の人へ教えてね。", family: "本人を責めるより、生活時間、剤形、残薬、費用や支援の不足を聞きます。服薬や採血の時刻は個別の指示を確認し、飲み忘れ時の方法を一律に決めません。", check: ["元気であることと治療継続の意味をつないだ", "自己中止を避ける説明と相談先を示した", "実行を妨げる事情を聞く姿勢を含めた"], teach: "薬がなくなりそうなとき、いつ・どこへ相談するか、ご自身の言葉で教えていただけますか？", sources: ["warning", "transition"], courses: ["recovery-medication-tests", "course-8"] },
+  { id: "exercise", title: "脈が上がらないなら、もっと運動してよい？", prompt: "心拍数だけを目安に頑張ろうとする方へ、移植心の反応と観察の意味を説明してみましょう。", adult: "移植後は、運動を始めてから脈が増えるまでに時間がかかる場合があります。脈がまだ速くないから余裕があるとは限りません。準備・整理運動を含めた個別の計画に沿い、息切れ、疲れ、めまいなども一緒に見ます。いつもと違う症状は無理をせず相談してください。", child: "脈の数字だけで頑張りすぎなくて大丈夫。苦しい、ふらふらする、いつもより疲れるときは止まって教えてね。", family: "遊び・通学・体育でも、本人の表現と顔色・呼吸・回復の様子を見ます。成人の運動時間や心拍目標を小児へ流用せず、学校とも個別計画を共有します。", check: ["除神経による反応の遅れを簡単な言葉で説明した", "脈以外の症状と個別計画を含めた", "新しい症状を通常の反応と片付けなかった"], teach: "脈があまり増えていなくても、途中でふらついたらどうしますか？", sources: ["exercise"], courses: ["heart-exercise-response", "recovery-exercise-life"] },
+  { id: "warning", title: "熱がなくても、下痢や息切れは連絡する？", prompt: "「熱がないから次の外来でよい」と考える方へ、普段との違いを伝える意味を説明してみましょう。", adult: "移植後は熱だけで体調を判断しません。新しい息切れ、下痢・嘔吐、いつもと違うだるさなども、移植チームへ相談する情報です。始まった時刻、程度、食事や薬、尿の変化を伝えましょう。強い呼吸困難や意識の異常などは、情報を全部集めるより救急対応を優先します。", child: "熱がなくても、苦しい、おなかが変、いつもみたいに遊べないときは教えてね。怒られることではないよ。", family: "哺乳・食事、活気、遊び方や呼吸の変化も本人の平常と比べます。連絡基準と時間外の連絡先は施設からの個別指導を確認します。症状だけで感染・拒絶反応と決めません。", check: ["発熱の有無だけで判断しないと伝えた", "本人の平常との違いと伝える情報を示した", "緊急時に連絡や対応を遅らせない説明を含めた"], teach: "夜にいつもと違う息苦しさが出た場合、誰にどのように連絡するか一緒に確認できますか？", sources: ["warning", "infection"], courses: ["recovery-observation-contact", "acute-observation-report"] },
+  { id: "pacing", title: "なぜ一時的なペースメーカをつけているの？", prompt: "術後のワイヤーを見て不安な本人・家族へ、目的と安全な動き方を説明してみましょう。", adult: "移植直後は心臓のリズムが遅くなることがあり、必要なときに電気の合図で拍動を支えるための装置です。脈の数字だけでなく、血圧や全身に血液が届いているかも見ています。今ついていることだけで、将来も永久的な装置が必要と決まるわけではありません。動くときは線を引っ張らないよう声をかけてください。", child: "心臓に、必要なときにトントンと合図を送る機械だよ。線を引っ張らず、動きたいときは一緒に動こうね。", family: "抱き上げや体位変換は、ワイヤーと接続部を守れる方法をスタッフと確認します。使用目的や回復の見通しは担当チームに確認し、設定や接続は独自に変えません。", check: ["必要な拍動を支える目的を説明した", "永久的な装置が必要と断定しなかった", "本人・家族ができる安全行動を具体的に示した"], teach: "ベッドから動きたくなったとき、線を守るためにどうすればよいでしょうか？", sources: ["recovery", "ishlt"], courses: ["acute-arrhythmia-temporary-pacing"] },
+  { id: "transition", title: "成人になるので、全部一人で管理するべき？", prompt: "自立を急ぐ家族と、不安を感じる若者へ、役割を段階的に引き継ぐ考え方を説明してみましょう。", adult: "年齢だけで全部を一人で行う必要はありません。薬の名前や残りを確かめる、予約する、困ったときに連絡するなど、できることを少しずつ増やします。小児側と成人側で受診・処方・検査の担当を確認し、支援が必要な部分は一緒に調整します。", child: "自分でやってみたいことと、まだ一緒にしてほしいことを教えてね。薬の残りを確認するなど、一つずつ練習しよう。", family: "本人の希望を聞き、任せる部分と支える部分を具体化します。紹介状だけで完了とせず、初回受診、処方、連絡先、学校・仕事との調整がつながったか確認します。", check: ["自立を年齢や一度の転院で完了としなかった", "本人の希望と具体的な技能・役割を確認した", "受診・処方が途切れない引き継ぎを含めた"], teach: "次の受診までに自分でやってみたいことと、手伝ってほしいことを教えてもらえますか？", sources: ["transition"], courses: ["longterm-transition-adult", "recovery-psychosocial-selfcare"] }
+];
+
+const learningVisuals = [
+  { id: "denervation", title: "除神経と運動反応", intro: "拍動を作る働きと、心拍数をすばやく調節する働きを分けて見る。", flow: [["残る働き：心臓自身の自動能", "洞結節などが電気刺激を作るため、神経の連絡が切れても拍動できる。"], ["変わる働き：自律神経による調節", "移植では神経の連絡が切れ、運動への速い心拍応答が得にくくなる。"], ["血中のカテコラミンなどへの反応は残る", "運動時の心拍上昇や回復が遅れる場合がある。反応には個人差がある。"], ["観察へ：脈と症状を合わせて評価", "準備・整理運動、息切れ・疲労・血圧などを個別計画に沿って確認する。"]], note: "各枠は、残る働き・変わる働き・観察の視点を整理しています。再神経支配の時期・程度は一律ではありません。", question: "脈があまり上がらないのに疲れるとき、何を追加して確認しますか？", answer: "症状、普段との違い、指示された血圧等の指標と回復を見ます。心拍数だけで負荷を増やさず、新しい耐容能低下を相談します。", sources: ["exercise"], courses: ["heart-denervation-basics", "heart-exercise-response"] },
+  { id: "right-heart", title: "右心・肺循環と全身の灌流", intro: "右室は、レシピエントの肺循環へ血液を送り出す。矢印は簡略化した血流の向きです。", flow: [["全身から戻る血液", "静脈を通って右房へ戻る。"], ["右室", "前負荷・収縮力・肺循環への後負荷の影響を受ける。"], ["肺循環", "肺血管抵抗が高いと、右室が送り出す負担が増える。"], ["左心から全身へ", "右室拍出の低下は左心への流入にも影響し、全身の灌流低下につながり得る。"]], note: "右心不全では静脈うっ血も問題になります。尿量低下やCVP上昇だけで輸液・除水を決めず、エコー、灌流、入出量、呼吸条件などを合わせます。肺のガス交換や吻合部などは省略した概念図です。", question: "尿量が減ったら、必ず水分が不足しているのでしょうか？", answer: "必ずしもそうではありません。右心機能低下や静脈うっ血なども含めて評価します。単独の値から輸液・利尿を自己判断せず、経時変化をチームに報告します。小児は循環の背景も確認します。", sources: ["ishlt"], courses: ["acute-right-heart-fluid", "acute-kidney-electrolytes-glucose"] },
+  { id: "diarrhea", title: "下痢・嘔吐と免疫抑制薬", intro: "「下痢だから薬が吸収されず、血中濃度は必ず低下する」とは限らない。", flow: [["免疫抑制療法を継続", "拒絶反応を防ぐ一方、感染への注意が必要になる。"], ["下痢・嘔吐などの体調変化", "感染症、薬剤など原因はさまざま。症状だけで原因を確定しない。"], ["薬と体液への影響を分ける", "下の2つの経路に加え、脱水による腎機能への影響も考える。"]], branches: [["濃度が上がる場合もある", "下痢時にタクロリムス濃度が上昇することがある。"], ["服薬・保持が難しくなる", "嘔吐や服薬できない状態では、薬を十分に取り込めない可能性もある。"]], note: "矢印は必ず起きる経過を示しません。血中濃度の変化の方向は一律に予測できず、製剤、服薬・採血時刻、併用薬、検査と症状を合わせて評価します。自己判断で追加服用・中止・増減しません。", question: "連絡するとき、下痢の回数以外に何を伝えますか？", answer: "始まった時刻、嘔吐・摂取・尿・体調、薬剤名と実際の服薬時刻、併用薬の変更などを伝えます。採血や薬の扱いは移植チームに確認します。状態が悪ければ、情報がそろうのを待たず緊急性に応じて対応します。", sources: ["infection", "warning"], courses: ["course-3", "recovery-observation-contact", "recovery-medication-tests"] }
+];
+
+function learningSourceList(keys) {
+  return `<details class="learning-sources"><summary>出典・確認先</summary><ul>${[...new Set(keys)].map(key => {
+    const source = learningSources[key];
+    return `<li><a href="${escapeStudyText(source[1])}" target="_blank" rel="noopener noreferrer">${escapeStudyText(source[0])}</a></li>`;
+  }).join("")}</ul><p class="note">整理日：2026年10月26日。説明例・図は資料の原則を学習場面へ当てはめた要約です。成人中心の資料を小児へ一律に適用せず、個別の指導を確認します。外部の出典は通信できるときに開いてください。</p></details>`;
+}
+
+function learningCourseLinks(ids) {
+  return `<div class="learning-course-links">${ids.map(id => {
+    const entry = courseEntries.find(item => item.id === id);
+    if (!entry) return "";
+    return `<button type="button" class="study-button" data-study-open="${entry.id}">${escapeStudyText(entry.fieldTitle)} ${escapeStudyText(entry.course[0])}：${escapeStudyText(entry.course[1])}</button>`;
+  }).join("")}</div>`;
+}
+
+function learningToolNav() {
+  return `<div class="study-actions" role="group" aria-label="活用メニュー"><button type="button" class="study-button" data-learning-page="scenes">場面から探す</button><button type="button" class="study-button" data-learning-page="practice">説明を練習する</button><button type="button" class="study-button" data-learning-page="visuals">図で理解する</button></div>`;
+}
+
+function showLearningScenes() {
+  showPanel("場面から探す", learningToolNav() + `<p>今学びたい場面から、分野をまたいで関連講座へ進めます。各講座の成人・小児の説明を確認してください。</p><p class="note">学習用の索引です。緊急時は教材を読むために対応を遅らせず、施設の手順・救急対応を優先してください。</p><div class="learning-cards">${learningScenes.map(scene => `<section class="learning-card"><h3>${escapeStudyText(scene.title)}</h3><p>${escapeStudyText(scene.description)}</p>${learningCourseLinks(scene.courses)}<button type="button" class="study-button" data-learning-practice="${scene.practice}">この場面の説明を練習する</button></section>`).join("")}</div>`);
+}
+
+function showExplanationPractice(openId) {
+  showPanel("患者・家族への説明練習", learningToolNav() + `<p>まず、場面に合わせて自分の言葉で声に出すか、頭の中で説明してください。その後「説明例と確認ポイント」を開いて振り返ります。</p><p class="note">看護職の学習用です。録音・文章の入力・採点・練習結果の保存は行いません。例文は個別の指導に合わせて言い換えてください。ティーチバックは患者を試すのではなく、説明が伝わったかを確かめる方法です。</p><div class="learning-cards">${explanationPractice.map(item => `<section class="learning-card" id="practice-${item.id}"><h3>${escapeStudyText(item.title)}</h3><p>${escapeStudyText(item.prompt)}</p><details><summary>説明例と確認ポイント</summary><h4>本人への説明例</h4><p>${escapeStudyText(item.adult)}</p><h4>患児への言い換え例</h4><p>${escapeStudyText(item.child)}</p><h4>両親・養育者と確認すること</h4><p>${escapeStudyText(item.family)}</p><h4>自分の説明を振り返る</h4><ul>${item.check.map(text => `<li>${escapeStudyText(text)}</li>`).join("")}</ul><h4>伝わったかを確かめる問いかけ例</h4><p class="learning-quote">${escapeStudyText(item.teach)}</p><h4>関連講座</h4>${learningCourseLinks(item.courses)}${learningSourceList([...item.sources, "teachback"])}</details></section>`).join("")}</div>`);
+  if (openId && explanationPractice.some(item => item.id === openId)) document.getElementById("practice-" + openId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function showLearningVisuals() {
+  showPanel("図で理解する", learningToolNav() + `<p>しくみから観察・説明へつなげる3つの概念図です。図の下の問いを考え、解説と関連講座で確認できます。</p><p class="note">診断や治療を選択する手順図ではありません。投与量・血中濃度目標・機器設定は示さず、成人・小児それぞれの個別計画を確認します。</p>${learningVisuals.map(item => `<section class="learning-card"><h3>${escapeStudyText(item.title)}</h3><figure class="learning-figure"><figcaption>${escapeStudyText(item.intro)}</figcaption><ol class="learning-flow ${item.id === "denervation" ? "learning-concepts" : ""}">${item.flow.map(([title, text]) => `<li><strong>${escapeStudyText(title)}</strong><p>${escapeStudyText(text)}</p></li>`).join("")}</ol>${item.branches ? `<div class="learning-branches">${item.branches.map(([title, text]) => `<div><strong>${escapeStudyText(title)}</strong><p>${escapeStudyText(text)}</p></div>`).join("")}</div>` : ""}<p class="note">${escapeStudyText(item.note)}</p></figure><details><summary>${escapeStudyText(item.question)}</summary><p>${escapeStudyText(item.answer)}</p></details><h4>関連講座</h4>${learningCourseLinks(item.courses)}${learningSourceList(item.sources)}</section>`).join("")}`);
+}
+
+// index.htmlを置き換えず、現在のメニューに入口を追加する。
+document.querySelectorAll(".menu-grid").forEach(grid => {
+  grid.insertAdjacentHTML("beforeend", `<button type="button" class="menu-card blue" data-target="scenes"><span class="menu-icon" aria-hidden="true">🧭</span><span class="menu-title">場面から探す</span><span class="menu-desc">食事・退院・小児・外来など</span></button><button type="button" class="menu-card green" data-target="practice"><span class="menu-icon" aria-hidden="true">💬</span><span class="menu-title">説明を練習する</span><span class="menu-desc">本人・家族への伝え方6テーマ</span></button><button type="button" class="menu-card purple" data-target="visuals"><span class="menu-icon" aria-hidden="true">🔎</span><span class="menu-title">図で理解する</span><span class="menu-desc">移植後のしくみを3つの図で</span></button>`);
+});
+
+panelBody.addEventListener("click", event => {
+  const button = event.target.closest("button");
+  if (!button || !courseDataReady) return;
+  if (button.dataset.learningPractice && explanationPractice.some(item => item.id === button.dataset.learningPractice)) {
+    if (canLeaveStudy()) showExplanationPractice(button.dataset.learningPractice);
+  } else if (button.dataset.learningPage) {
+    if (!canLeaveStudy()) return;
+    if (button.dataset.learningPage === "scenes") showLearningScenes();
+    else if (button.dataset.learningPage === "practice") showExplanationPractice();
+    else if (button.dataset.learningPage === "visuals") showLearningVisuals();
+  }
+});
+
+
 document.querySelectorAll("[data-target]").forEach(button => {
   button.addEventListener("click", () => {
     const target = button.dataset.target;
     if (!courseDataReady) return;
     if (!canLeaveStudy()) return;
-    if (target === "courses") {
+    if (target === "scenes") {
+      showLearningScenes();
+    } else if (target === "practice") {
+      showExplanationPractice();
+    } else if (target === "visuals") {
+      showLearningVisuals();
+    } else if (target === "courses") {
       showCourses();
     } else if (target === "drugs") {
       showPanel("薬剤リファレンス", "<ul>" + drugData.slice(0,4).map(d => `<li><strong>${d.term}</strong><br>${d.body}</li>`).join("") + "</ul>");
